@@ -7,6 +7,7 @@
 //CONSTANTES
 #define OK 0;
 #define ERROR -1;
+#define TAM 256;
 
 
 typedef struct Alfabeto {
@@ -71,6 +72,20 @@ int get_size(Alfabeto* alfabeto);
 
  *********************************************************************************/
 int insertar_simbolo(char* simbolo);
+
+ /********************************************************************************
+	Funcion: imprime_alfabeto
+	Descripcion: imprime un alfabeto
+	Argumentos: 
+				- Alfabeto* a
+	Salida:
+				- OK si todo ha salido bien
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
+int imprime_alfabeto(Alfabeto* a);
 
 
 

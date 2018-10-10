@@ -28,7 +28,7 @@
 		return NULL;
 	}
 	for(i = 0; i < size; i++)
-		a->simbolos[i] = NULL;
+		a->simbolos[i] = (char *)malloc(TAM*sizeof(char));
 	a->size = size;
 	return a;
  }
@@ -98,4 +98,29 @@ int insertar_simbolo(char* simbolo, Alfabeto* a){
 	}
 	a->simbolos[i]= simbolo;
 	return OK;
+}
+
+ /********************************************************************************
+	Funcion: imprime_alfabeto
+	Descripcion: imprime un alfabeto
+	Argumentos: 
+				- Alfabeto* a
+	Salida:
+				- OK si todo ha salido bien
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
+int imprime_alfabeto(Alfabeto* a, char* n){
+	int i = 0;
+	if(!a)
+		return ERROR;
+
+	printf("num_simbolos = %d\n", a->size);
+	
+	printf("%s={ ", n);
+	while(a->simbolos[i])
+		printf("%s ",a->simbolos[i]);
+	printf("}\n");
 }

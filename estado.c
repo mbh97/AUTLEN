@@ -1,24 +1,4 @@
-#ifndef ESTADO
-#define ESTADO
-
-#include <stdio.h>
-#include <string.h>
-
-//CONSTANTES
-#define OK 0;
-#define ERROR -1;
-#define TAM 256;
-
-enum TIPO{
-	INICIAL = 0,
-	NORMAL = 1,
-	FINAL = 2
-};
-
-typedef struct Estado {
-	char * nombre; // nombre del estado
-	enum TIPO tipo; // tipo de estado
-} Estado;
+#include "estado.h"
 
 /********************************************************************************
 	Funcion: crear_estado
@@ -33,7 +13,23 @@ typedef struct Estado {
 
 
  *********************************************************************************/
- Estado* crear_estado(char * nombre, TIPO tipo);
+ Estado* crear_estado(char * nombre, TIPO tipo){
+ 	if(!nombre || !tipo)
+ 		return NULL;
+
+ 	Estado* estado = NULL;
+ 	estado = (Estado*)malloc(sizeof(Estado));
+ 	if(!estado)
+ 		return NULL
+ 	estado->nombre=(char*)malloc(TAM*sizeof(char));
+ 	if(!estado->nombre){
+ 		free(estado);
+ 		return NULL;
+ 	}
+ 	estado->nombre = nombre;
+ 	estado->tipo = tipo;
+ 	return estado;
+ }
 
  /********************************************************************************
 	Funcion: eliminar_estado
@@ -47,7 +43,14 @@ typedef struct Estado {
 
 
  *********************************************************************************/
-int eliminar_estado(Estado* estado);
+int eliminar_estado(Estado* estado){
+	if(!estado)
+		return ERROR;
+	if(estado->nombre)
+		free(estado->nombre);
+	free(estado);
+	return OK;
+}
 
 
  /********************************************************************************
@@ -62,7 +65,11 @@ int eliminar_estado(Estado* estado);
 
 
  *********************************************************************************/
-char* get_nombre(Estado* estado);
+char* get_nombre(Estado* estado){
+	if(!estado)
+		return NULL;
+	return estado->nombre;
+}
 
  /********************************************************************************
 	Funcion: get_tipo
@@ -76,7 +83,11 @@ char* get_nombre(Estado* estado);
 
 
  *********************************************************************************/
-TIPO get_tipo(Estado* estado);
+TIPO get_tipo(Estado* estado){
+	if(!estado)
+		return ERROR;
+	return estado->tipo;
+}
 
  /********************************************************************************
 	Funcion: set_tipo
@@ -91,7 +102,9 @@ TIPO get_tipo(Estado* estado);
 
 
  *********************************************************************************/
-int set_tipo(Estado* estado, TIPO newTipo);
-
-
-#endif ESTADO
+int set_tipo(Estado* estado, TIPO newTipo){
+	if(!estado)
+		return ERROR;
+	estado->tipo = newTipo;
+	return OK;
+}
