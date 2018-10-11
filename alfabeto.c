@@ -27,8 +27,10 @@
 		free(a);
 		return NULL;
 	}
-	for(i = 0; i < size; i++)
+	for(i = 0; i < size; i++){
 		a->simbolos[i] = (char *)malloc(TAM*sizeof(char));
+		a->simbolos[i] = NULL;
+	}
 	a->size = size;
 	return a;
  }
@@ -51,7 +53,8 @@ int eliminar_alfabeto(Alfabeto* alfabeto){
 		return ERROR;
 	for(i = 0; i < alfabeto->size; i++)
 		free(alfabeto->simbolos[i]);
-	
+		
+	free(alfabeto->simbolos);
 	free(alfabeto);
 	return OK;
 }
@@ -90,7 +93,11 @@ int get_size(Alfabeto* alfabeto){
 int insertar_simbolo(char* simbolo, Alfabeto* a){
 	int i = 0;
 	if(!a || !simbolo)
-		return ERROR;		
+		return ERROR;
+	if(!a->simbolos[i]){
+		a->simbolos[i]= simbolo;
+		return OK;
+	}
 	while(a->simbolos[i]){
 		i+=1;
 		if(i==a->size)
@@ -112,15 +119,18 @@ int insertar_simbolo(char* simbolo, Alfabeto* a){
 
 
  *********************************************************************************/
-int imprime_alfabeto(Alfabeto* a, char* n){
+int imprime_alfabeto(Alfabeto* a){
 	int i = 0;
 	if(!a)
 		return ERROR;
 
 	printf("num_simbolos = %d\n", a->size);
 	
-	printf("%s={ ", n);
-	while(a->simbolos[i])
+	printf("A={ ");
+	while(i<a->size){
 		printf("%s ",a->simbolos[i]);
+		i+=1;
+	}
 	printf("}\n");
+	return OK;
 }

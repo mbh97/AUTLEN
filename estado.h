@@ -3,16 +3,18 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 //CONSTANTES
-#define OK 0;
-#define ERROR -1;
-#define TAM 256;
+#define OK 0
+#define ERROR -1
+#define TAM 256
 
 enum TIPO{
 	INICIAL = 0,
 	NORMAL = 1,
-	FINAL = 2
+	FINAL = 2,
+	INICIAL_Y_FINAL = 3
 };
 
 typedef struct Estado {
@@ -33,7 +35,7 @@ typedef struct Estado {
 
 
  *********************************************************************************/
- Estado* crear_estado(char * nombre, TIPO tipo);
+ Estado* crear_estado(char * nombre, enum TIPO tipo);
 
  /********************************************************************************
 	Funcion: eliminar_estado
@@ -76,14 +78,14 @@ char* get_nombre(Estado* estado);
 
 
  *********************************************************************************/
-TIPO get_tipo(Estado* estado);
+enum TIPO get_tipo(Estado* estado);
 
  /********************************************************************************
 	Funcion: set_tipo
 	Descripcion: modifica el tipo de un estado
 	Argumentos: 
 				- Estado* estado
-				- TIPO newTipo
+				- enum TIPO newTipo
 	Salida:
 				- OK si todo ha salido bien
 				- ERROR en otro caso
@@ -91,7 +93,7 @@ TIPO get_tipo(Estado* estado);
 
 
  *********************************************************************************/
-int set_tipo(Estado* estado, TIPO newTipo);
+int set_tipo(Estado* estado, enum TIPO newTipo);
 
 
-#endif ESTADO
+#endif //ESTADO

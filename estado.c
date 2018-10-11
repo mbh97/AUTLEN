@@ -13,14 +13,14 @@
 
 
  *********************************************************************************/
- Estado* crear_estado(char * nombre, TIPO tipo){
+ Estado* crear_estado(char * nombre, enum TIPO tipo){
  	if(!nombre || !tipo)
  		return NULL;
 
  	Estado* estado = NULL;
  	estado = (Estado*)malloc(sizeof(Estado));
  	if(!estado)
- 		return NULL
+ 		return NULL;
  	estado->nombre=(char*)malloc(TAM*sizeof(char));
  	if(!estado->nombre){
  		free(estado);
@@ -83,7 +83,7 @@ char* get_nombre(Estado* estado){
 
 
  *********************************************************************************/
-TIPO get_tipo(Estado* estado){
+enum TIPO get_tipo(Estado* estado){
 	if(!estado)
 		return ERROR;
 	return estado->tipo;
@@ -94,7 +94,7 @@ TIPO get_tipo(Estado* estado){
 	Descripcion: modifica el tipo de un estado
 	Argumentos: 
 				- Estado* estado
-				- TIPO newTipo
+				- enum TIPO newTipo
 	Salida:
 				- OK si todo ha salido bien
 				- ERROR en otro caso
@@ -102,7 +102,7 @@ TIPO get_tipo(Estado* estado){
 
 
  *********************************************************************************/
-int set_tipo(Estado* estado, TIPO newTipo){
+int set_tipo(Estado* estado, enum TIPO newTipo){
 	if(!estado)
 		return ERROR;
 	estado->tipo = newTipo;

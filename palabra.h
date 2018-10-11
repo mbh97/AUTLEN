@@ -1,5 +1,5 @@
-#ifndef ALFABETO
-#define ALFABETO
+#ifndef PALABRA
+#define PALABRA
 
 #include <stdio.h>
 #include <string.h>
@@ -11,31 +11,30 @@
 #define TAM 256
 
 
-typedef struct Alfabeto {
+typedef struct Palabra {
 	char ** simbolos; // array de simbolos
-	int size; // tamanno del alfabeto
-} Alfabeto;
+	int size; // tamanno de la palabra
+} Palabra;
 
 
 /********************************************************************************
-	Funcion: crear_alfabeto
-	Descripcion: crea un alfabeto
-	Argumentos: 
-				-int size =  tamanno del alfabeto
+	Funcion: crear_palabra
+	Descripcion: crea una palabra
+	Argumentos: -
 	Salida:
-				- *Alfabeto si se ha podido crear correctamente
+				- *Palabra si se ha podido crear correctamente
 				- NULL si ha habido algun problema a la hora de crearlo
 
 
 
  *********************************************************************************/
- Alfabeto* crear_alfabeto(int size);
+ Palabra* crear_palabra();
  
  /********************************************************************************
-	Funcion: eliminar_alfabeto
-	Descripcion: elimina y libera memoria reservada para un alfabeto y lo que hay dentro de este
+	Funcion: eliminar_palabra
+	Descripcion: elimina y libera memoria reservada para una palabra y lo que hay dentro de esta
 	Argumentos: 
-				-Alfabeto* alfabeto = alfabeto a eliminar
+				-Palabra* palabra = palabra a eliminar
 	Salida:
 				- OK si todo ha ido bien
 				- ERROR en otro caso
@@ -43,28 +42,28 @@ typedef struct Alfabeto {
 
 
  *********************************************************************************/
-int eliminar_alfabeto(Alfabeto* alfabeto);
+int eliminar_palabra(Palabra* palabra);
 
  /********************************************************************************
 	Funcion: get_size
-	Descripcion: consigue el tamanno de un alfabeto
+	Descripcion: consigue el tamanno de una palabra
 	Argumentos: 
-				-Alfabeto* alfabeto: 
+				-Palabra* palabra: 
 	Salida:
-				- tammano del alfabeto
+				- tammano del palabra
 				- ERROR en otro caso
 
 
 
  *********************************************************************************/
-int get_size(Alfabeto* alfabeto);
+int get_size(Palabra* palabra);
 
  /********************************************************************************
 	Funcion: insertar_simbolo
-	Descripcion: inserta un simbolo en un alfabeto
+	Descripcion: inserta un simbolo en un palabra
 	Argumentos: 
 				-char* simbolo = simbolo a insertar
-				- Alfabeto* a = alfabeto
+				- Palabra* palabra = palabra
 	Salida:
 				- OK si todo ha ido bien
 				- ERROR en otro caso
@@ -72,24 +71,23 @@ int get_size(Alfabeto* alfabeto);
 
 
  *********************************************************************************/
-int insertar_simbolo(char* simbolo, Alfabeto* a);
+int insertar_simbolo(char* simbolo, Palabra* palabra);
 
  /********************************************************************************
-	Funcion: imprime_alfabeto
-	Descripcion: imprime un alfabeto
+	Funcion: eliminar_simbolo
+	Descripcion: elimina un simbolo en un palabra
 	Argumentos: 
-				- Alfabeto* a
+				-char* simbolo = simbolo a eliminar
+				- Palabra* palabra = palabra
 	Salida:
-				- OK si todo ha salido bien
+				- OK si todo ha ido bien
 				- ERROR en otro caso
 
 
 
  *********************************************************************************/
-int imprime_alfabeto(Alfabeto* a);
+int eliminar_simbolo(Palabra* palabra);
 
 
-
-
-#endif //ALFABETO
+#endif //PALABRA
 
