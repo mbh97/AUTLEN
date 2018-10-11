@@ -59,7 +59,7 @@ int eliminar_palabra(Palabra* palabra);
 int get_size(Palabra* palabra);
 
  /********************************************************************************
-	Funcion: insertar_simbolo
+	Funcion: insertar_letra
 	Descripcion: inserta un simbolo en un palabra
 	Argumentos: 
 				-char* simbolo = simbolo a insertar
@@ -71,7 +71,7 @@ int get_size(Palabra* palabra);
 
 
  *********************************************************************************/
-int insertar_simbolo(char* simbolo, Palabra* palabra);
+int insertar_letra(char* simbolo, Palabra* palabra);
 
  /********************************************************************************
 	Funcion: eliminar_simbolo
@@ -86,7 +86,7 @@ int insertar_simbolo(char* simbolo, Palabra* palabra);
 
 
  *********************************************************************************/
-int eliminar_simbolo(Palabra* palabra);
+int eliminar_letra(Palabra* palabra);
 
  /********************************************************************************
 	Funcion: imprime_palabra

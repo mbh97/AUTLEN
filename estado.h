@@ -111,4 +111,7 @@ int set_tipo(Estado* estado, enum TIPO newTipo);
 int imprime_estado(Estado* estado);
 
 
+
+
+
 #endif //ESTADO

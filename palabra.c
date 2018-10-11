@@ -69,7 +69,7 @@ int get_size(Palabra* palabra){
 }
 
  /********************************************************************************
-	Funcion: insertar_simbolo
+	Funcion: insertar_letra
 	Descripcion: inserta un simbolo en un palabra
 	Argumentos: 
 				-char* simbolo = simbolo a insertar
@@ -81,7 +81,7 @@ int get_size(Palabra* palabra){
 
 
  *********************************************************************************/
-int insertar_simbolo(char* simbolo, Palabra* palabra){
+int insertar_letra(char* simbolo, Palabra* palabra){
 	char ** aux =  NULL;
 	if(!simbolo || !palabra)
 		return ERROR;
@@ -97,15 +97,15 @@ int insertar_simbolo(char* simbolo, Palabra* palabra){
 	if(!palabra->simbolos[palabra->size-1]){
 		printf("2\n");
 		palabra->size -= 1;
-		aux = (char **)realloc(palabra->simbolos, palabra->size); //revisar!!!!
+		aux = (char **)realloc(palabra->simbolos, palabra->size*(sizeof(char *))); //revisar!!!!
 		return ERROR;
 	}
-	palabra->simbolos[palabra->size-1] = simbolo;
+	strcpy(palabra->simbolos[palabra->size-1], simbolo);
 	return OK;
 }
 
  /********************************************************************************
-	Funcion: eliminar_simbolo
+	Funcion: eliminar_letra
 	Descripcion: elimina un simbolo en un palabra
 	Argumentos: 
 				-char* simbolo = simbolo a eliminar
@@ -117,15 +117,16 @@ int insertar_simbolo(char* simbolo, Palabra* palabra){
 
 
  *********************************************************************************/
-int eliminar_simbolo(Palabra* palabra){
+int eliminar_letra(Palabra* palabra){
 	int i = 0;
 	if(!palabra)
 		return ERROR;
 	if(palabra->size == 1)
 		return eliminar_palabra(palabra);
 	for(i = 1; i< palabra->size; i++){
-		palabra->simbolos[i-1] = palabra->simbolos[i];
+		strcpy(palabra->simbolos[i-1], palabra->simbolos[i]);
 	}
+	printf("Soy un simbolo %s\n", palabra->simbolos[i-1]);
 	free(palabra->simbolos[i-1]);
 	palabra->size -=1;
 	return OK;

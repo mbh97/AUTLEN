@@ -28,7 +28,7 @@
 		return NULL;
 	}
 	for(i = 0; i < size; i++){
-		a->simbolos[i] = (char *)malloc(TAM*sizeof(char));
+		//a->simbolos[i] = (char *)malloc(TAM*sizeof(char));
 		a->simbolos[i] = NULL;
 	}
 	a->size = size;
@@ -52,7 +52,9 @@ int eliminar_alfabeto(Alfabeto* alfabeto){
 	if(!alfabeto)
 		return ERROR;
 	for(i = 0; i < alfabeto->size; i++){
-		free(alfabeto->simbolos[i]);
+		printf("%s \n", alfabeto->simbolos[i]);
+		if(alfabeto->simbolos[i])
+			free(alfabeto->simbolos[i]);
 	}
 		
 	free(alfabeto->simbolos);
@@ -96,7 +98,8 @@ int insertar_simbolo(char* simbolo, Alfabeto* a){
 	if(!a || !simbolo)
 		return ERROR;
 	if(!a->simbolos[i]){
-		a->simbolos[i]= simbolo;
+		a->simbolos[i] = (char *)malloc(TAM*sizeof(char));
+		strcpy(a->simbolos[i], simbolo);
 		return OK;
 	}
 	while(a->simbolos[i]){
@@ -104,7 +107,8 @@ int insertar_simbolo(char* simbolo, Alfabeto* a){
 		if(i==a->size)
 			return ERROR; // alfabeto completo
 	}
-	a->simbolos[i]= simbolo;
+	a->simbolos[i] = (char *)malloc(TAM*sizeof(char));
+	strcpy(a->simbolos[i], simbolo);
 	return OK;
 }
 
