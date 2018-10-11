@@ -96,4 +96,19 @@ enum TIPO get_tipo(Estado* estado);
 int set_tipo(Estado* estado, enum TIPO newTipo);
 
 
+ /********************************************************************************
+	Funcion: imprime_estado
+	Descripcion: imprime un estado
+	Argumentos: 
+				- Estado* estado
+	Salida:
+				- OK si todo ha salido bien
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
+int imprime_estado(Estado* estado);
+
+
 #endif //ESTADO
