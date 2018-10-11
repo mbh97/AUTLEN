@@ -108,3 +108,29 @@ int set_tipo(Estado* estado, enum TIPO newTipo){
 	estado->tipo = newTipo;
 	return OK;
 }
+
+ /********************************************************************************
+	Funcion: imprime_estado
+	Descripcion: imprime un estado
+	Argumentos: 
+				- Estado* estado
+	Salida:
+				- OK si todo ha salido bien
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
+int imprime_estado(Estado* estado){
+	if(!estado)
+		return ERROR;
+ 	if(estado->tipo==INICIAL)
+		printf("E = { %s, INICIAL }\n", estado->nombre);
+	if(estado->tipo==NORMAL)
+		printf("E = { %s, NORMAL }\n", estado->nombre);
+	if(estado->tipo==FINAL)
+		printf("E = { %s, FINAL }\n", estado->nombre);
+	if(estado->tipo==INICIAL_Y_FINAL)
+		printf("E = { %s, INICIAL_Y_FINAL }\n", estado->nombre);
+	return OK;
+}

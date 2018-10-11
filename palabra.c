@@ -86,18 +86,21 @@ int insertar_letra(char* simbolo, Palabra* palabra){
 	if(!simbolo || !palabra)
 		return ERROR;
 	palabra->size += 1;
-	aux = (char **)realloc(palabra->simbolos, palabra->size);
+	aux = (char **)realloc(palabra->simbolos, palabra->size*(sizeof(char *)));
 	if (!aux) {
 		palabra->size -= 1;
+		printf("1\n");
 		return ERROR;
 	}
 	palabra->simbolos=aux;
 	palabra->simbolos[palabra->size-1] = (char*)malloc(TAM*sizeof(char));
-	if(!palabra->simbolos[palabra->size]){
+	if(!palabra->simbolos[palabra->size-1]){
+		printf("2\n");
 		palabra->size -= 1;
 		aux = (char **)realloc(palabra->simbolos, palabra->size); //revisar!!!!
 		return ERROR;
 	}
+	palabra->simbolos[palabra->size-1] = simbolo;
 	return OK;
 }
 
@@ -125,5 +128,32 @@ int eliminar_simbolo(Palabra* palabra){
 	}
 	free(palabra->simbolos[i-1]);
 	palabra->size -=1;
+	return OK;
+}
+ /********************************************************************************
+	Funcion: imprime_palabra
+	Descripcion: imprime un palabra
+	Argumentos: 
+				- Palabra* a
+	Salida:
+				- OK si todo ha salido bien
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
+int imprime_palabra(Palabra* a){
+	int i = 0;
+	if(!a)
+		return ERROR;
+
+	printf("num_simbolos = %d\n", a->size);
+	
+	printf("P=[ ");
+	while(i<a->size){
+		printf("%s ",a->simbolos[i]);
+		i+=1;
+	}
+	printf("]\n");
 	return OK;
 }

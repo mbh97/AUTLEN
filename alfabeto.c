@@ -51,8 +51,9 @@ int eliminar_alfabeto(Alfabeto* alfabeto){
 	int i = 0;
 	if(!alfabeto)
 		return ERROR;
-	for(i = 0; i < alfabeto->size; i++)
+	for(i = 0; i < alfabeto->size; i++){
 		free(alfabeto->simbolos[i]);
+	}
 
 	free(alfabeto->simbolos);
 	free(alfabeto);

@@ -88,5 +88,19 @@ int insertar_letra(char* simbolo, Palabra* palabra);
  *********************************************************************************/
 int eliminar_simbolo(Palabra* palabra);
 
+ /********************************************************************************
+	Funcion: imprime_palabra
+	Descripcion: imprime un palabra
+	Argumentos: 
+				- Palabra* a
+	Salida:
+				- OK si todo ha salido bien
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
+int imprime_palabra(Palabra* a);
+
 
 #endif //PALABRA
