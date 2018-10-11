@@ -4,7 +4,7 @@
 /********************************************************************************
 	Funcion: crear_alfabeto
 	Descripcion: crea un alfabeto
-	Argumentos: 
+	Argumentos:
 				-int size =  tamanno del alfabeto
 	Salida:
 				- *Alfabeto si se ha podido crear correctamente
@@ -17,8 +17,8 @@
 	Alfabeto* a = NULL;
 	int i = 0;
 	if(size < 1)
-		return NULL; 
-		
+		return NULL;
+
 	a=(Alfabeto *)malloc(sizeof(Alfabeto));
 	if(!a)
 		return NULL;
@@ -38,7 +38,7 @@
  /********************************************************************************
 	Funcion: eliminar_alfabeto
 	Descripcion: elimina y libera memoria reservada para un alfabeto y lo que hay dentro de este
-	Argumentos: 
+	Argumentos:
 				-Alfabeto* alfabeto = alfabeto a eliminar
 	Salida:
 				- OK si todo ha ido bien
@@ -53,7 +53,7 @@ int eliminar_alfabeto(Alfabeto* alfabeto){
 		return ERROR;
 	for(i = 0; i < alfabeto->size; i++)
 		free(alfabeto->simbolos[i]);
-		
+
 	free(alfabeto->simbolos);
 	free(alfabeto);
 	return OK;
@@ -62,8 +62,8 @@ int eliminar_alfabeto(Alfabeto* alfabeto){
  /********************************************************************************
 	Funcion: get_size
 	Descripcion: consigue el tamanno de un alfabeto
-	Argumentos: 
-				-Alfabeto* alfabeto: 
+	Argumentos:
+				-Alfabeto* alfabeto:
 	Salida:
 				- tammano del alfabeto
 				- ERROR en otro caso
@@ -80,9 +80,9 @@ int get_size(Alfabeto* alfabeto){
  /********************************************************************************
 	Funcion: insertar_simbolo
 	Descripcion: inserta un simbolo en un alfabeto
-	Argumentos: 
+	Argumentos:
 				-char* simbolo = simbolo a insertar
-				- Alfabeto* a = alfabeto 
+				- Alfabeto* a = alfabeto
 	Salida:
 				- OK si todo ha ido bien
 				- ERROR en otro caso
@@ -110,7 +110,7 @@ int insertar_simbolo(char* simbolo, Alfabeto* a){
  /********************************************************************************
 	Funcion: imprime_alfabeto
 	Descripcion: imprime un alfabeto
-	Argumentos: 
+	Argumentos:
 				- Alfabeto* a
 	Salida:
 				- OK si todo ha salido bien
@@ -119,16 +119,16 @@ int insertar_simbolo(char* simbolo, Alfabeto* a){
 
 
  *********************************************************************************/
-int imprime_alfabeto(Alfabeto* a){
+int imprime_alfabeto(FILe* fd,  Alfabeto* a){
 	int i = 0;
-	if(!a)
+	if(!a||!fd)
 		return ERROR;
 
-	printf("num_simbolos = %d\n", a->size);
-	
-	printf("A={ ");
+	fprintf(fd, "num_simbolos = %d\n", a->size);
+
+	fprintf(fd, "A={ ");
 	while(i<a->size){
-		printf("%s ",a->simbolos[i]);
+		fprintf(fd, "%s ",a->simbolos[i]);
 		i+=1;
 	}
 	printf("}\n");

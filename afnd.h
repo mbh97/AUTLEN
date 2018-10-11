@@ -7,15 +7,18 @@
 #include <estado.h>
 
 //CONSTANTES
-#define OK 0;
-#define ERROR -1;
-#define TAM 256;
+#define OK 0
+#define ERROR -1
+#define TAM 256
 
 
 typedef struct AFND {
   char* nombre;
-  Alfabeto* a;
-	Estado* est;
+  Alfabeto* alf;
+  int talf; //numero de simbolos
+  int nest; //numero estados
+	Estado** est;
+  Palabra* palabra;
 } AFND;
 
 
