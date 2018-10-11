@@ -1,6 +1,7 @@
 
 #include "afnd.h"
 
+
 /********************************************************************************
 Funcion: AFNDNuevo
 Descripcion: INICIALIZACIÓN DE UN NUEVO AFND DE NOMBRE af1 Y CON 3 ESTADOS Y 2 SÍMBOLOS EN SU ALFABETO
@@ -17,31 +18,50 @@ Salida:
  *********************************************************************************/
  AFND * AFNDNuevo(char* nombre, int num_estados, int num_simbolos){
 	AFND* afnd = NULL;
-	int i = 0;
-  if(!nombre)
-    return NULL;
-	if(num_estados < 1 && num_simbolos < 1)
+	if(num_estados < 1 || num_simbolos < 1 || !nombre)
 		return NULL;
 
-	a=(Alfabeto *)malloc(sizeof(Alfabeto));
-	if(!a)
+	afnd=(AFND *)malloc(sizeof(AFND));
+	if(!afnd)
 		return NULL;
-	a->simbolos = (char **)malloc(size*sizeof(char *));
-	if(!a->simbolos){
-		free(a);
-		return NULL;
-	}
-	for(i = 0; i < size; i++)
-		a->simbolos[i] = (char *)malloc(TAM*sizeof(char));
-	a->size = size;
-	return a;
+	afnd->alf = crear_alfabeto(num_simbolos);
+  if(!afnd->alf){
+    free(afnd);
+    return NULL;
+  }
+
+  afnd->est = (Estado **)malloc(num_estados*sizeof(Estado*))
+  if(!afnd->est){
+    eliminar_alfabeto(afnd->alf);
+    free(afnd);
+    return NULL;
+  }
+
+  afnd->nombre = (char*)malloc(TAM*sizeof(char));
+  if(!afnd->nombre){
+    free(afnd->est);
+    eliminar_alfabeto(afnd->alf);
+    free(afnd);
+    return NULL;
+  }
+  afnd->palabra = crear_palabra();
+  if(!afnd->palabra){
+    free(afnd->nombre)
+    free(afnd->est);
+    eliminar_alfabeto(afnd->alf);
+    free(afnd);
+    return NULL;
+  }
+  afnd->talf = num_simbolos;
+  afnd->nest = num_estados;
+	return afnd;
  }
 
  /********************************************************************************
-	Funcion: eliminar_alfabeto
-	Descripcion: elimina y libera memoria reservada para un alfabeto y lo que hay dentro de este
+	Funcion: AFNDElimina
+	Descripcion: elimina y libera memoria reservada para un afnd y lo que hay dentro de este
 	Argumentos:
-				-Alfabeto* alfabeto = alfabeto a eliminar
+				-AFND * p_afnd = afnd a eliminar
 	Salida:
 				- OK si todo ha ido bien
 				- ERROR en otro caso
@@ -49,33 +69,57 @@ Salida:
 
 
  *********************************************************************************/
-int eliminar_alfabeto(Alfabeto* alfabeto){
+ void AFNDElimina(AFND * p_afnd);{
 	int i = 0;
-	if(!alfabeto)
+	if(!p_afnd)
 		return ERROR;
-	for(i = 0; i < alfabeto->size; i++)
-		free(alfabeto->simbolos[i]);
-
-	free(alfabeto);
+	for(i = 0; i < p_afnd->nest; i++)
+		if(!eliminar_estado(p_afnd->est[i])){
+      return ERROR;
+    }
+  free(p_afnd->est);
+  if(!eliminar_alfabeto(p_afnd->alf))
+    return ERROR;
+  free(p_afnd->nombre);
+  eliminar_palabra(p_afnd->palabra);
+	free(p_afnd);
 	return OK;
 }
 
  /********************************************************************************
-	Funcion: get_size
-	Descripcion: consigue el tamanno de un alfabeto
+	Funcion: AFNDImprime
+  Descripcion: imprime un afnd
 	Argumentos:
-				-Alfabeto* alfabeto:
-	Salida:
-				- tammano del alfabeto
-				- ERROR en otro caso
-
+				- FILE * fd = fichero donde lo imprime
+        AFND* p_afnd = afnd a imprimir
 
 
  *********************************************************************************/
-int get_size(Alfabeto* alfabeto){
-	if(!alfabeto)
-		return ERROR;
-	return alfabeto->size;
+void AFNDImprime(FILE * fd, AFND* p_afnd){
+  int i =0;
+	if(!p_afnd || !fd){
+    		return ERROR;
+  }
+  fprintf(fd, "%s={\n", p_afnd->nombre);
+  imprime_alfabeto(fd, p_afnd->alf);
+  fprintf(fd, "num_estados = %d\n", p_afnd->nest);
+
+  fprintf(fd, "Q={ ");
+  while(i<p_afnd->nest){
+    if(get_tipo(p_afnd->est[i]) == INICIAL){
+      fprintf(fd, "->%s ",a->simbolos[i]);
+    }else if (get_tipo(p_afnd->est[i]) == FINAL) {
+      fprintf(fd, "%s* ",a->simbolos[i]);
+    }else{
+      fprintf(fd, "%s ",a->simbolos[i]);
+    }
+    i+=1;
+  }
+  fprintf(fd, "}\n");
+  fprintf(fd,  "Funcion de Transición = {\n");
+  //cosassss de TRANSICIONES
+  fprintf(fd, "}\n");
+  fprintf(fd, "}\n");
 }
 
  /********************************************************************************
@@ -83,7 +127,7 @@ int get_size(Alfabeto* alfabeto){
 	Descripcion: inserta un simbolo en un alfabeto
 	Argumentos:
 				-char* simbolo = simbolo a insertar
-				- Alfabeto* a = alfabeto
+				- AFND * p_afnd = afnd en cuyo alfabeto insertamos simbolo
 	Salida:
 				- OK si todo ha ido bien
 				- ERROR en otro caso
@@ -91,40 +135,103 @@ int get_size(Alfabeto* alfabeto){
 
 
  *********************************************************************************/
-int insertar_simbolo(char* simbolo, Alfabeto* a){
+AFND * AFNDInsertaSimbolo(AFND * p_afnd, char * simbolo){
 	int i = 0;
-	if(!a || !simbolo)
-		return ERROR;
-	while(a->simbolos[i]){
-		i+=1;
-		if(i==a->size)
-			return ERROR; // alfabeto completo
-	}
-	a->simbolos[i]= simbolo;
-	return OK;
+	if(!p_afnd || !simbolo)
+		return NULL;
+	if(insertar_simbolo(simbolo, p_afnd->alf)
+    return p_afnd;
+  return NULL;
 }
 
  /********************************************************************************
-	Funcion: imprime_alfabeto
-	Descripcion: imprime un alfabeto
+	Funcion: AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo)
+	Descripcion: inserta un estado
 	Argumentos:
-				- Alfabeto* a
+				- Alfabeto* aAFND * p_afnd
+        -char * nombre
+        -int tipo
 	Salida:
-				- OK si todo ha salido bien
+        - OK si todo ha salido bien
 				- ERROR en otro caso
 
 
 
  *********************************************************************************/
-int imprime_alfabeto(Alfabeto* a, char* n){
-	int i = 0;
-	if(!a)
+AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo){
+  int i = 0;
+	if(!p_afnd || !nombre)
 		return ERROR;
+	if(!p_afnd->est[i]){
+		p_afnd->est[i]= crear_estado(nombre, tipo);
+		return OK;
+	}
+	while(p_afnd->est[i]){
+		i+=1;
+		if(i==p_afnd->nest)
+			return ERROR; // alfabeto completo
+	}
+	p_afnd->est[i]= crear_estado(nombre, tipo);
+	return OK;
+}
+/********************************************************************************
+ Funcion: AFNDInsertaLetra(AFND * p_afnd, char * letra)
+ Descripcion: inserta una letra
+ Argumentos:
+       - AFND * p_afnd
+       -char * letra
+ Salida:
+       - AFND* si todo ha salido bien
+       - NULL en otro caso
 
-	printf("num_simbolos = %d\n", a->size);
 
-	printf("%s={ ", n);
-	while(a->simbolos[i])
-		printf("%s ",a->simbolos[i]);
-	printf("}\n");
+
+*********************************************************************************/
+
+
+
+AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra){
+  int i = 0;
+	if(!p_afnd || !letra)
+		return NULL;
+	if(insertar_letra(letra, p_afnd->palabra))
+    return p_afnd;
+  return NULL;
+}
+
+/********************************************************************************
+ Funcion: AFNDImprimeConjuntoEstadosActual(FILE * fd, AFND * p_afnd)
+ Descripcion: imprime el conjunto de estados actual
+ Argumentos:
+       - FILE * fd
+       - AFND * p_afnd
+*********************************************************************************/
+
+void AFNDImprimeConjuntoEstadosActual(FILE * fd, AFND * p_afnd){
+  int i =0;
+	if(!p_afnd || !fd){
+    		return ERROR;
+  }
+  fprintf(fd, "%s={\n", p_afnd->nombre);
+  imprime_alfabeto(fd, p_afnd->alf);
+  fprintf(fd, "num_estados = %d\n", p_afnd->nest);
+
+  fprintf(fd, "Q={ ");
+  while(i<p_afnd->nest){
+    if(get_tipo(p_afnd->est[i]) == INICIAL){
+      fprintf(fd, "->%s ",a->simbolos[i]);
+    }else if (get_tipo(p_afnd->est[i]) == FINAL) {
+      fprintf(fd, "%s* ",a->simbolos[i]);
+    }else{
+      fprintf(fd, "%s ",a->simbolos[i]);
+    }
+    i+=1;
+  }
+  fprintf(fd, "}\n");
+  fprintf(fd,  "Funcion de Transición = {\n");
+  //cosassss de TRANSICIONES
+  fprintf(fd, "}\n");
+  fprintf(fd, "}\n");
+
+
 }

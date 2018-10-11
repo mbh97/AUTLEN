@@ -29,11 +29,11 @@ typedef struct Palabra {
 
  *********************************************************************************/
  Palabra* crear_palabra();
- 
+
  /********************************************************************************
 	Funcion: eliminar_palabra
 	Descripcion: elimina y libera memoria reservada para una palabra y lo que hay dentro de esta
-	Argumentos: 
+	Argumentos:
 				-Palabra* palabra = palabra a eliminar
 	Salida:
 				- OK si todo ha ido bien
@@ -47,8 +47,8 @@ int eliminar_palabra(Palabra* palabra);
  /********************************************************************************
 	Funcion: get_size
 	Descripcion: consigue el tamanno de una palabra
-	Argumentos: 
-				-Palabra* palabra: 
+	Argumentos:
+				-Palabra* palabra:
 	Salida:
 				- tammano del palabra
 				- ERROR en otro caso
@@ -61,7 +61,7 @@ int get_size(Palabra* palabra);
  /********************************************************************************
 	Funcion: insertar_letra
 	Descripcion: inserta un simbolo en un palabra
-	Argumentos: 
+	Argumentos:
 				-char* simbolo = simbolo a insertar
 				- Palabra* palabra = palabra
 	Salida:
@@ -76,7 +76,7 @@ int insertar_letra(char* simbolo, Palabra* palabra);
  /********************************************************************************
 	Funcion: eliminar_simbolo
 	Descripcion: elimina un simbolo en un palabra
-	Argumentos: 
+	Argumentos:
 				-char* simbolo = simbolo a eliminar
 				- Palabra* palabra = palabra
 	Salida:
@@ -104,4 +104,3 @@ int imprime_palabra(Palabra* a);
 
 
 #endif //PALABRA
-
