@@ -1,5 +1,6 @@
 #include "estado.h"
 
+
 /********************************************************************************
 	Funcion: crear_estado
 	Descripcion: crea un estado
@@ -26,7 +27,9 @@
  		free(estado);
  		return NULL;
  	}
- 	estado->nombre = nombre;
+ 	estado->transiciones = NULL;
+ 	estado->ntran = 0;
+ 	strcpy(estado->nombre,nombre);
  	estado->tipo = tipo;
  	return estado;
  }
@@ -44,10 +47,17 @@
 
  *********************************************************************************/
 int eliminar_estado(Estado* estado){
+	int i;
 	if(!estado)
 		return ERROR;
 	if(estado->nombre)
 		free(estado->nombre);
+	if(estado->ntran > 0){
+		for(i = 0; i < estado->ntran; i++)
+			if(estado->transiciones[i])
+				elimina_transicion(estado->transiciones[i]);
+		free(estado->transiciones);
+	}
 	free(estado);
 	return OK;
 }
@@ -109,6 +119,7 @@ int set_tipo(Estado* estado, enum TIPO newTipo){
 	return OK;
 }
 
+
  /********************************************************************************
 	Funcion: imprime_estado
 	Descripcion: imprime un estado
@@ -133,4 +144,31 @@ int imprime_estado(Estado* estado){
 	if(estado->tipo==INICIAL_Y_FINAL)
 		printf("E = { %s, INICIAL_Y_FINAL }\n", estado->nombre);
 	return OK;
+}
+
+int inserta_transicion(Estado* estado, Transicion * tran){
+	Transicion ** aux =  NULL;
+	if(!tran || !estado)
+		return ERROR;
+	estado->ntran += 1;
+	aux = (Transicion **)realloc(estado->transiciones, estado->ntran*(sizeof(Transicion*)));
+	if (!aux) {
+		estado->ntran -= 1;
+		return ERROR;
+	}
+	estado->transiciones=aux;
+	estado->transiciones[estado->ntran-1] = tran;
+	return OK;
+}
+
+Transicion** get_transiciones(Estado* estado){
+	if(!estado)
+		return ERROR;
+	return estado->transiciones;
+}
+
+int get_ntran(Estado* estado){
+	if(!estado)
+		return NULL;
+	return estado->ntran;
 }

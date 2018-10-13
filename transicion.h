@@ -12,7 +12,7 @@
 
 typedef struct Transicion {
 	char* valor; // valor de la transicion
-	Estado * estado; // estado final de la transicion
+	char * estado; // estado final de la transicion
 } Transicion;
 
 /********************************************************************************

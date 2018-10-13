@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "transicion.h"
+
 
 //CONSTANTES
 #define OK 0
@@ -20,6 +22,8 @@ enum TIPO{
 typedef struct Estado {
 	char * nombre; // nombre del estado
 	enum TIPO tipo; // tipo de estado
+	Transicion** transiciones;
+	int ntran;
 } Estado;
 
 /********************************************************************************

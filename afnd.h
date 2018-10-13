@@ -3,8 +3,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <alfabeto.h>
-#include <estado.h>
+#include "alfabeto.h"
+#include "estado.h"
 
 //CONSTANTES
 #define OK 0
@@ -13,12 +13,14 @@
 
 
 typedef struct AFND {
-  char* nombre;
-  Alfabeto* alf;
-  int talf; //numero de simbolos
-  int nest; //numero estados
+	char* nombre;
+	Alfabeto* alf;
+	int talf; //numero de simbolos
+	int nest; //numero estados
 	Estado** est;
-  Palabra* palabra;
+	Palabra* palabra;
+	char** actuales;
+	int nact;
 } AFND;
 
 
@@ -38,11 +40,11 @@ typedef struct AFND {
  *********************************************************************************/
  AFND * AFNDNuevo(char* nombre, int num_estados, int num_simbolos);
 
- /********************************************************************************
-	Funcion: eliminar_alfabeto
-	Descripcion: elimina y libera memoria reservada para un alfabeto y lo que hay dentro de este
+/********************************************************************************
+	Funcion: AFNDElimina
+	Descripcion: elimina y libera memoria reservada para un afnd y lo que hay dentro de este
 	Argumentos:
-				-Alfabeto* alfabeto = alfabeto a eliminar
+				-AFND * p_afnd = afnd a eliminar
 	Salida:
 				- OK si todo ha ido bien
 				- ERROR en otro caso
@@ -50,21 +52,18 @@ typedef struct AFND {
 
 
  *********************************************************************************/
-int eliminar_alfabeto(Alfabeto* alfabeto);
+ void AFNDElimina(AFND * p_afnd);{
 
  /********************************************************************************
-	Funcion: get_size
-	Descripcion: consigue el tamanno de un alfabeto
+	Funcion: AFNDImprime
+  Descripcion: imprime un afnd
 	Argumentos:
-				-Alfabeto* alfabeto:
-	Salida:
-				- tammano del alfabeto
-				- ERROR en otro caso
-
+				- FILE * fd = fichero donde lo imprime
+        AFND* p_afnd = afnd a imprimir
 
 
  *********************************************************************************/
-int get_size(Alfabeto* alfabeto);
+void AFNDImprime(FILE * fd, AFND* p_afnd);
 
  /********************************************************************************
 	Funcion: insertar_simbolo

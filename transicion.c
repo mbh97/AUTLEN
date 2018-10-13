@@ -13,16 +13,26 @@
 
 
  *********************************************************************************/
- Transicion* crear_transicion(char* valor, Estado * estado){
+ Transicion* crear_transicion(char* valor, char * estado){
 	if(!valor || !estado)
 		return NULL;
 	Transicion* transicion = NULL;
 	transicion = (Transicion*)malloc(sizeof(Transicion));
 	if(!transicion)
 		return NULL;
-	transicion->estado = estado;
+	transicion->estado = (char *)malloc(TAM*sizeof(char));
+	if(!transicion->estado){
+		free(transicion);
+		return NULL;
+	}
+	strcpy(transicion->estado, estado);
 	transicion->valor = (char *)malloc(TAM*sizeof(char));
-	transicion->valor = simbolo;
+	if(!transicion->valor){
+		free(transicion->estado);
+		free(transicion);
+		return NULL;
+	}
+	strcpy(transicion->valor, simbolo);
 	return transicion;
  }
  
@@ -41,7 +51,7 @@
 int eliminar_transicion(Transicion* transicion){
 	if(!transicion)
 		return ERROR;
-	eliminar_estado(transicion->estado);
+	free(transicion->estado);
 	free(transicion->valor);
 	free(transicion);
 	return OK;
@@ -77,8 +87,19 @@ char* get_valor(Transicion* transicion){
 
 
  *********************************************************************************/
-Estado* get_estado(Transicion* transicion){
+char* get_estado(Transicion* transicion){
 	if(!transicion)
 		return NULL;
 	return transicion->estado;
+}
+
+Transicion* copiar_transicion(Transicion * transicion){
+	Transicion* copia = NULL;
+	if(!transicion)
+		return NULL;
+
+	copia = crear_transicion(get_valor(transicion),get_estado(transicion));
+	if(!copia)
+		return NULL;
+	return copia;
 }
