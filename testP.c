@@ -24,16 +24,14 @@ int main(int argc, char const *argv[]){
 		eliminar_palabra(a);
 		return -1;
 	}
-	printf("Imprime palabra..\n");
-	imprime_palabra(a);
+
 	printf("Elimina simbolo..\n");
 	salida = eliminar_letra(a);
 	if(salida == -1){
 		printf("ERROR");
 		return -1;
 	}
-	printf("Imprime palabra..\n");
-	imprime_palabra(a);
+
 	printf("Elimina palabra..\n");
 	salida = eliminar_palabra(a);
 	if(salida == -1){

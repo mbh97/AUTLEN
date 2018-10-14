@@ -24,8 +24,6 @@ int main(int argc, char const *argv[]){
 		eliminar_alfabeto(a);
 		return -1;
 	}
-	printf("Imprime alfabeto..\n");
-	imprime_alfabeto(a);
 	printf("Elimina alfabeto..\n");
 	salida = eliminar_alfabeto(a);
 	if(salida == -1){

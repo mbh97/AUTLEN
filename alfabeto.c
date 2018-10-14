@@ -28,7 +28,6 @@
 		return NULL;
 	}
 	for(i = 0; i < size; i++){
-		//a->simbolos[i] = (char *)malloc(TAM*sizeof(char));
 		a->simbolos[i] = NULL;
 	}
 	a->size = size;
@@ -52,7 +51,6 @@ int eliminar_alfabeto(Alfabeto* alfabeto){
 	if(!alfabeto)
 		return ERROR;
 	for(i = 0; i < alfabeto->size; i++){
-		printf("%s \n", alfabeto->simbolos[i]);
 		if(alfabeto->simbolos[i])
 			free(alfabeto->simbolos[i]);
 	}
@@ -116,6 +114,7 @@ int insertar_simbolo(char* simbolo, Alfabeto* a){
 	Funcion: imprime_alfabeto
 	Descripcion: imprime un alfabeto
 	Argumentos:
+				- FILE* fd
 				- Alfabeto* a
 	Salida:
 				- OK si todo ha salido bien
@@ -124,7 +123,7 @@ int insertar_simbolo(char* simbolo, Alfabeto* a){
 
 
  *********************************************************************************/
-int imprime_alfabeto(FILe* fd,  Alfabeto* a){
+int imprime_alfabeto(FILE* fd,  Alfabeto* a){
 	int i = 0;
 	if(!a||!fd)
 		return ERROR;

@@ -135,6 +135,7 @@ int eliminar_letra(Palabra* palabra){
 	Funcion: imprime_palabra
 	Descripcion: imprime un palabra
 	Argumentos: 
+				- FILE *fd
 				- Palabra* a
 	Salida:
 				- OK si todo ha salido bien
@@ -147,7 +148,7 @@ int imprime_palabra(FILE *fd,Palabra* a){
 	int i = 0;
 	if(!a)
 		return ERROR;	
-	printf("[(%s)",a->size);
+	printf("[(%d)",a->size);
 	while(i<a->size){
 		printf(" %s",a->simbolos[i]);
 		i+=1;
@@ -156,8 +157,20 @@ int imprime_palabra(FILE *fd,Palabra* a){
 	return OK;
 }
 
+ /********************************************************************************
+	Funcion: get_primer
+	Descripcion: devuelve el primer elemento de la palabra
+	Argumentos: 
+				- Palabra* a
+	Salida:
+				- primer elemento de la cadena
+				- NULL en otro caso
+
+
+
+ *********************************************************************************/
 char* get_primer(Palabra* palabra){
 	if(!palabra)
 		return NULL;
-	return palabra[0];
+	return palabra->simbolos[0];
 }

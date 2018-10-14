@@ -77,7 +77,8 @@ int insertar_simbolo(char* simbolo, Alfabeto* a);
  /********************************************************************************
 	Funcion: imprime_alfabeto
 	Descripcion: imprime un alfabeto
-	Argumentos: 
+	Argumentos:
+				- FILE* fd
 				- Alfabeto* a
 	Salida:
 				- OK si todo ha salido bien
@@ -86,7 +87,7 @@ int insertar_simbolo(char* simbolo, Alfabeto* a);
 
 
  *********************************************************************************/
-int imprime_alfabeto(Alfabeto* a);
+int imprime_alfabeto(FILE* fd,  Alfabeto* a);
 
 
 

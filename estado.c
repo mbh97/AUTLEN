@@ -15,7 +15,7 @@
 
  *********************************************************************************/
  Estado* crear_estado(char * nombre, enum TIPO tipo){
- 	if(!nombre || !tipo)
+ 	if(!nombre)
  		return NULL;
 
  	Estado* estado = NULL;
@@ -55,7 +55,7 @@ int eliminar_estado(Estado* estado){
 	if(estado->ntran > 0){
 		for(i = 0; i < estado->ntran; i++)
 			if(estado->transiciones[i])
-				elimina_transicion(estado->transiciones[i]);
+				eliminar_transicion(estado->transiciones[i]);
 		free(estado->transiciones);
 	}
 	free(estado);
@@ -70,7 +70,7 @@ int eliminar_estado(Estado* estado){
 				- Estado* estado
 	Salida:
 				- nombre del estado
-				- ERROR en otro caso
+				- NULL en otro caso
 
 
 
@@ -100,23 +100,66 @@ enum TIPO get_tipo(Estado* estado){
 }
 
  /********************************************************************************
-	Funcion: set_tipo
-	Descripcion: modifica el tipo de un estado
+	Funcion: get_transiciones
+	Descripcion: devuelve las transiciones de un estado
 	Argumentos: 
 				- Estado* estado
-				- enum TIPO newTipo
 	Salida:
-				- OK si todo ha salido bien
+				- Tranciones de un estado
+				- NULL en otro caso
+
+
+
+ *********************************************************************************/
+Transicion** get_transiciones(Estado* estado){
+	if(!estado)
+		return NULL;
+	return estado->transiciones;
+}
+
+ /********************************************************************************
+	Funcion: get_ntran
+	Descripcion: devuelve el numero de transiciones de un estado
+	Argumentos: 
+				- Estado* estado
+	Salida:
+				- numero de transiciones de un estado
 				- ERROR en otro caso
 
 
 
  *********************************************************************************/
-int set_tipo(Estado* estado, enum TIPO newTipo){
+int get_ntran(Estado* estado){
 	if(!estado)
 		return ERROR;
-	estado->tipo = newTipo;
-	return OK;
+	return estado->ntran;
+}
+
+ /********************************************************************************
+	Funcion: funcion_transicion
+	Descripcion: devuelve el resultado de aplicar la funcion de transicion a un estado
+	Argumentos: 
+				- Estado* estado
+				- char* valor 
+	Salida:
+				- nombre del siguiente estado
+				- NULL en otro caso
+
+
+
+ *********************************************************************************/
+char* funcion_transicion(Estado* e, char* valor){
+	int i = 0, ntran;
+	Transicion**transiciones;
+	ntran = get_ntran(e);
+	if(ntran == 0)
+		return NULL;
+	transiciones = get_transiciones(e);
+	for(i=0; i<ntran; i++)
+		if(!strcmp(valor,get_valor(transiciones[i])))
+			return get_estado(transiciones[i]);
+	
+	return NULL;
 }
 
 
@@ -146,6 +189,19 @@ int imprime_estado(Estado* estado){
 	return OK;
 }
 
+ /********************************************************************************
+	Funcion: inserta_transicion
+	Descripcion: inserta transicion
+	Argumentos: 
+				- Estado* estado
+				- Transicion * tran
+	Salida:
+				- OK si todo ha salido bien
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
 int inserta_transicion(Estado* estado, Transicion * tran){
 	Transicion ** aux =  NULL;
 	if(!tran || !estado)
@@ -161,26 +217,4 @@ int inserta_transicion(Estado* estado, Transicion * tran){
 	return OK;
 }
 
-Transicion** get_transiciones(Estado* estado){
-	if(!estado)
-		return ERROR;
-	return estado->transiciones;
-}
 
-int get_ntran(Estado* estado){
-	if(!estado)
-		return NULL;
-	return estado->ntran;
-}
-
-char* funcion_transicion(Estado* e, char* valor){
-	int i = 0;
-	ntran = get_ntran(e);
-	if(ntran == 0)
-		return NULL;
-	transiciones = get_transiciones(e);
-	for(i=0; i<ntran; i++)
-		if(strcmp(valor,get_valor(transiciones[i]))
-			return get_nombre(transiciones[i])
-	return NULL;
-}

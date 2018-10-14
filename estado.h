@@ -85,11 +85,54 @@ char* get_nombre(Estado* estado);
 enum TIPO get_tipo(Estado* estado);
 
  /********************************************************************************
-	Funcion: set_tipo
-	Descripcion: modifica el tipo de un estado
+	Funcion: get_transiciones
+	Descripcion: devuelve el numero de transiciones de un estado
 	Argumentos: 
 				- Estado* estado
-				- enum TIPO newTipo
+	Salida:
+				- Tranciones de un estado
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
+Transicion** get_transiciones(Estado* estado);
+
+ /********************************************************************************
+	Funcion: get_ntran
+	Descripcion: devuelve el numero de transiciones de un estado
+	Argumentos: 
+				- Estado* estado
+	Salida:
+				- numero de transiciones de un estado
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
+int get_ntran(Estado* estado);
+
+ /********************************************************************************
+	Funcion: funcion_transicion
+	Descripcion: devuelve el resultado de aplicar la funcion de transicion a un estado
+	Argumentos: 
+				- Estado* estado
+				- char* valor 
+	Salida:
+				- nombre del siguiente estado
+				- NULL en otro caso
+
+
+
+ *********************************************************************************/
+char* funcion_transicion(Estado* e, char* valor);
+
+ /********************************************************************************
+	Funcion: inserta_transicion
+	Descripcion: inserta transicion
+	Argumentos: 
+				- Estado* estado
+				- Transicion * tran
 	Salida:
 				- OK si todo ha salido bien
 				- ERROR en otro caso
@@ -97,8 +140,7 @@ enum TIPO get_tipo(Estado* estado);
 
 
  *********************************************************************************/
-int set_tipo(Estado* estado, enum TIPO newTipo);
-
+int inserta_transicion(Estado* estado, Transicion * tran);
 
  /********************************************************************************
 	Funcion: imprime_estado

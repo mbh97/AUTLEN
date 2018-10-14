@@ -20,7 +20,7 @@ typedef struct Transicion {
 	Descripcion: crea una transicion
 	Argumentos:
 				- char* valor: valor de la transicion
-				- Estado * estado: estado final de la transicion
+				- char * estado: estado final de la transicion
 	Salida:
 				- *Transicion si se ha podido crear correctamente
 				- NULL si ha habido algun problema a la hora de crearlo
@@ -28,7 +28,7 @@ typedef struct Transicion {
 
 
  *********************************************************************************/
- Transicion* crear_transicion(char* valor, Estado * estado);
+ Transicion* crear_transicion(char* valor, char * estado);
  
   /********************************************************************************
 	Funcion: eliminar_transicion
@@ -70,7 +70,7 @@ char* get_valor(Transicion* transicion);
 
 
  *********************************************************************************/
-Estado* get_estado(Transicion* transicion);
+char* get_estado(Transicion* transicion);
 
 
 

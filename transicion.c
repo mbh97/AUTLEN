@@ -5,7 +5,7 @@
 	Descripcion: crea una transicion
 	Argumentos:
 				- char* valor: valor de la transicion
-				- Estado * estado: estado final de la transicion
+				- char * estado: estado final de la transicion
 	Salida:
 				- *Transicion si se ha podido crear correctamente
 				- NULL si ha habido algun problema a la hora de crearlo
@@ -32,7 +32,7 @@
 		free(transicion);
 		return NULL;
 	}
-	strcpy(transicion->valor, simbolo);
+	strcpy(transicion->valor, valor);
 	return transicion;
  }
  

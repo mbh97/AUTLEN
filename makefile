@@ -1,6 +1,6 @@
 CFLAGS := -g -Wall -pedantic
 CC := gcc
-EXE := testA testE testP
+EXE := testA testP testT testE
 
 all: $(EXE)
 
@@ -13,15 +13,6 @@ testA.o: testA.c
 testA: testA.o alfabeto.o
 	$(CC) $(CFLAGS) testA.o alfabeto.o -o testA
 
-estado.o: estado.c estado.h
-	$(CC) $(CFLAGS) -c estado.c -o estado.o
-
-testE.o: testE.c
-	$(CC) $(CFLAGS) -c testE.c -o testE.o
-
-testE: testE.o estado.o
-	$(CC) $(CFLAGS) testE.o estado.o -o testE
-	
 palabra.o: palabra.c palabra.h
 	$(CC) $(CFLAGS) -c palabra.c -o palabra.o
 
@@ -30,6 +21,24 @@ testP.o: testP.c
 
 testP: testP.o palabra.o
 	$(CC) $(CFLAGS) testP.o palabra.o -o testP
+
+transicion.o: transicion.c transicion.h
+	$(CC) $(CFLAGS) -c transicion.c -o transicion.o
+
+testT.o: testT.c
+	$(CC) $(CFLAGS) -c testT.c -o testT.o
+
+testT: testT.o transicion.o
+	$(CC) $(CFLAGS) testT.o transicion.o -o testT
+
+estado.o: estado.c estado.h
+	$(CC) $(CFLAGS) -c estado.c -o estado.o
+
+testE.o: testE.c
+	$(CC) $(CFLAGS) -c testE.c -o testE.o
+
+testE: testE.o transicion.o estado.o
+	$(CC) $(CFLAGS) testE.o transicion.o estado.o -o testE
 
 clean:
 	rm -f *.o $(EXE)
