@@ -143,18 +143,21 @@ int eliminar_letra(Palabra* palabra){
 
 
  *********************************************************************************/
-int imprime_palabra(Palabra* a){
+int imprime_palabra(FILE *fd,Palabra* a){
 	int i = 0;
 	if(!a)
-		return ERROR;
-
-	printf("num_simbolos = %d\n", a->size);
-	
-	printf("P=[ ");
+		return ERROR;	
+	printf("[(%s)",a->size);
 	while(i<a->size){
-		printf("%s ",a->simbolos[i]);
+		printf(" %s",a->simbolos[i]);
 		i+=1;
 	}
 	printf("]\n");
 	return OK;
+}
+
+char* get_primer(Palabra* palabra){
+	if(!palabra)
+		return NULL;
+	return palabra[0];
 }

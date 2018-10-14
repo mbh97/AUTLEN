@@ -105,7 +105,9 @@ Salida:
 
  *********************************************************************************/
 void AFNDImprime(FILE * fd, AFND* p_afnd){
-  int i =0;
+  int i =0, ntran, j = 0, k=0;
+  char * valor, inicial, final, simbolo;
+  Transicion** transiciones;
 	if(!p_afnd || !fd){
     		return ERROR;
   }
@@ -116,19 +118,39 @@ void AFNDImprime(FILE * fd, AFND* p_afnd){
   fprintf(fd, "Q={ ");
   while(i<p_afnd->nest){
     if(get_tipo(p_afnd->est[i]) == INICIAL){
-      fprintf(fd, "->%s ",a->simbolos[i]);
+      fprintf(fd, "->%s ",get_nombre(p_afnd->est[i]));
     }else if (get_tipo(p_afnd->est[i]) == FINAL) {
-      fprintf(fd, "%s* ",a->simbolos[i]);
+      fprintf(fd, "%s* ",get_nombre(p_afnd->est[i]));
+    }else if (get_tipo(p_afnd->est[i]) == INICIAL_Y_FINAL) {
+      fprintf(fd, ->"%s* ",get_nombre(p_afnd->est[i]));
     }else{
-      fprintf(fd, "%s ",a->simbolos[i]);
+      fprintf(fd, "%s ",get_nombre(p_afnd->est[i]));
     }
     i+=1;
   }
   fprintf(fd, "}\n");
   fprintf(fd,  "Funcion de Transición = {\n");
   //cosassss de TRANSICIONES
-  fprintf(fd, "}\n");
-  fprintf(fd, "}\n");
+  //f(q0,0)={ q0 }
+  for(i=0; i<p_afnd->nest; i++){
+  	inicial = get_nombre(p_afnd->est[i]);
+	ntran = get_ntran(p_afnd->est[i]);
+	if(ntran == 0){
+		for(k = 0; k<p_afnd->talf; k++){
+			simbolo = p_afnd->alf[k];
+			fprintf(fd, "\t\tf(%s,%s)={ }\n",inicial,simbolo);
+		}
+	}
+	else{
+		transiciones = get_transiciones(p_afnd->est[i]);
+		for(j=0; j<ntran; j++){
+	  		valor = get_valor(transiciones[j]);
+	  		final = get_nombre(transiciones[j])
+	  		fprintf(fd, "\t\tf(%s,%s)={ %s }\n",inicial,simbolo,final);
+  		}
+	}
+	fprintf(fd, "\t}\n");
+ 	fprintf(fd, "}\n");
 }
 
  /********************************************************************************
@@ -217,8 +239,24 @@ AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra){
 *********************************************************************************/
 
 void AFNDImprimeConjuntoEstadosActual(FILE * fd, AFND * p_afnd){
-
-
+	int i = 0;
+	Estado * estado;
+	if(!fd || !p_afnd)
+		return;
+	fprintf(fd, "ACTUALMENTE EN {");
+	for(i=0, i<p_afnd->nact; i++){
+		estado = buscar_estado(p->actuales[i]);
+		if(get_tipo(estado) == INICIAL)
+			fprintf(fd, "->%s ", p->actuales[i]);
+		if(get_tipo(estado) == FINAL)
+			fprintf(fd, "%s* ", p->actuales[i]);
+		if(get_tipo(estado) == INICIAL_Y_FINAL)
+			fprintf(fd, "->%s* ", p->actuales[i]);
+		if(get_tipo(estado) == NORMAL)
+			fprintf(fd, "%s ", p->actuales[i]);
+	}
+	fprintf(fd, "}\n");
+	return;
 }
 
 Estado* buscar_estado(AFND * p_afnd, char* nombre){
@@ -285,6 +323,80 @@ AFND * AFNDeliminaActuales(AFND * p_afnd){
 		free(p_afnd->actuales[i]);
 	free(p_afnd->actuales);
 }
+
+
+void AFNDImprimeCadenaActual(FILE *fd, AFND * p_afnd){
+	if(!fd || !p_afnd)
+		return;
+	imprime_palabra(fd,p_afnd->palabra);
+	return;
+}
+
+
+AFND * AFNDInicializaEstado (AFND * p_afnd){
+	int i = 0;
+	if(!p_afnd)
+		return NULL;
+	for(i=0;i<p_afnd->nest;i++)
+		if(get_tipo(p_afnd->est[i])==INICIAL || get_tipo(p_afnd->est[i])==INICIAL_Y_FINAL)
+			AFNDInsertaActuales(p_afnd, get_nombre(p_afnd->est[i]));
+	return p_afnd;
+
+}
+
+void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd){
+	if(es_vacia(p_afnd->palabra))
+		return;
+	char * simbolo *actual;
+	Estado * estado_actual;
+	char ** aux = NULL;
+	int naux = 0;
+	AFNDImprimeConjuntoEstadosActual(fd, p_afnd);
+	imprime_palabra(fd, p_afnd->palabra);
+	for(i=0; i<p_afnd->nact; i++)
+		actual = p_afnd->actuales[i];
+		estado_actual = buscar_estado(p_afnd, actual);
+		siguiente = funcion_transicion(estado_actual, get_primer(p_afnd->palabra));
+		if(siguiente){
+			if(naux != 0){
+				if(!es_repeticion(siguiente, aux, naux)){
+					naux +=1;
+					aux = (char **)realloc(aux, naux*(sizeof(char *)));
+					strcpy(aux[naux-1], siguiente);
+				}		
+			}
+			naux +=1;
+			aux = (char **)realloc(aux, naux*(sizeof(char *)));
+			strcpy(aux[naux-1], siguiente);
+		}
+	}
+	AFNDeliminaActuales(p_afnd);
+	for(i =0; i<naux; i++){
+		AFNDInsertaActuales(p_afnd, aux[i]);
+		free(aux[i]);
+	}
+	free(aux);
+	AFNDTransita(p_afnd);
+	AFNDProcesaEntrada(fd,p_afnd);
+
+}
+
+int es_repeticion(char* siguiente, char**aux, int naux){
+	if(!siguiente || !aux){
+		return 1;
+	}
+	for(i=0; i<naux;i++){
+		if(!strcmp(siguiente,aux[i]))
+			return 1;
+	}
+	return 0;
+}
+
+
+void AFNDTransita(AFND * p_afnd){
+	eliminar_letra(p_afnd->palabra);
+}
+	
 
 
 Estado* copiar_estado(Estado * estado){

@@ -172,3 +172,15 @@ int get_ntran(Estado* estado){
 		return NULL;
 	return estado->ntran;
 }
+
+char* funcion_transicion(Estado* e, char* valor){
+	int i = 0;
+	ntran = get_ntran(e);
+	if(ntran == 0)
+		return NULL;
+	transiciones = get_transiciones(e);
+	for(i=0; i<ntran; i++)
+		if(strcmp(valor,get_valor(transiciones[i]))
+			return get_nombre(transiciones[i])
+	return NULL;
+}

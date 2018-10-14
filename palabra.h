@@ -100,7 +100,7 @@ int eliminar_letra(Palabra* palabra);
 
 
  *********************************************************************************/
-int imprime_palabra(Palabra* a);
+int imprime_palabra(FILE *fd,Palabra* a);
 
 
 #endif //PALABRA
