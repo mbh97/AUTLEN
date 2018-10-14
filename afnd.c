@@ -1,7 +1,5 @@
 
 #include "afnd.h"
-#include "transicion.h"
-#include "estado.h"
 
 
 /********************************************************************************
@@ -154,7 +152,7 @@ void AFNDImprime(FILE * fd, AFND* p_afnd){
 }
 
  /********************************************************************************
-	Funcion: insertar_simbolo
+	Funcion: AFNDInsertaSimbolo
 	Descripcion: inserta un simbolo en un alfabeto
 	Argumentos:
 				-char* simbolo = simbolo a insertar
@@ -170,7 +168,7 @@ AFND * AFNDInsertaSimbolo(AFND * p_afnd, char * simbolo){
 	int i = 0;
 	if(!p_afnd || !simbolo)
 		return NULL;
-	if(insertar_simbolo(simbolo, p_afnd->alf)
+	if(insertar_simbolo(simbolo, p_afnd->alf))
     	return p_afnd;
   	return NULL;
 }
@@ -218,9 +216,6 @@ AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo){
 
 
 *********************************************************************************/
-
-
-
 AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra){
   	int i = 0;
 	if(!p_afnd || !letra)
@@ -397,7 +392,6 @@ void AFNDTransita(AFND * p_afnd){
 	eliminar_letra(p_afnd->palabra);
 }
 	
-
 
 Estado* copiar_estado(Estado * estado){
 	Estado* copia = NULL;

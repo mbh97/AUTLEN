@@ -45,7 +45,7 @@ typedef struct Palabra {
 int eliminar_palabra(Palabra* palabra);
 
  /********************************************************************************
-	Funcion: get_size
+	Funcion: size_palabra
 	Descripcion: consigue el tamanno de una palabra
 	Argumentos:
 				-Palabra* palabra:
@@ -56,7 +56,7 @@ int eliminar_palabra(Palabra* palabra);
 
 
  *********************************************************************************/
-int get_size(Palabra* palabra);
+int size_palabra(Palabra* palabra);
 
  /********************************************************************************
 	Funcion: insertar_letra

@@ -61,7 +61,7 @@ int eliminar_alfabeto(Alfabeto* alfabeto){
 }
 
  /********************************************************************************
-	Funcion: get_size
+	Funcion: size_alfabeto
 	Descripcion: consigue el tamanno de un alfabeto
 	Argumentos:
 				-Alfabeto* alfabeto:
@@ -72,7 +72,7 @@ int eliminar_alfabeto(Alfabeto* alfabeto){
 
 
  *********************************************************************************/
-int get_size(Alfabeto* alfabeto){
+int size_alfabeto(Alfabeto* alfabeto){
 	if(!alfabeto)
 		return ERROR;
 	return alfabeto->size;
