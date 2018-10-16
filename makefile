@@ -46,10 +46,8 @@ afnd.o: afnd.c afnd.h
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c -o main.o
 
-main: main.o transicion.o estado.o palabra.o alfabeto.o
-	$(CC) $(CFLAGS) main.o transicion.o estado.o palabra.o alfabeto.o -o main
-
-
+main: main.o afnd.o transicion.o estado.o palabra.o alfabeto.o
+	$(CC) $(CFLAGS) main.o afnd.o transicion.o estado.o palabra.o alfabeto.o -o main
 
 clean:
 	rm -f *.o $(EXE)
