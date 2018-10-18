@@ -218,3 +218,19 @@ int inserta_transicion(Estado* estado, Transicion * tran){
 }
 
 
+char* buscar_transicion(Estado* estado, char* valor){
+	int ntran, i;
+	Transicion **trans;
+	if(!estado || !valor)
+		return NULL;
+	ntran = get_ntran(estado);
+	if(ntran==0){
+		return NULL;
+	}
+	trans = get_transiciones(estado);
+	for(i = 0; i<ntran; i++){
+		if(!strcmp(get_valor(trans[i]),valor))
+			return get_estado(trans[i]);
+	}
+	return NULL;
+}

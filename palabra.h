@@ -117,5 +117,6 @@ int imprime_palabra(FILE *fd,Palabra* a);
  *********************************************************************************/
 char* get_primer(Palabra* palabra);
 
+int es_vacia(Palabra* palabra);
 
 #endif //PALABRA

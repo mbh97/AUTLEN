@@ -174,3 +174,11 @@ char* get_primer(Palabra* palabra){
 		return NULL;
 	return palabra->simbolos[0];
 }
+
+int es_vacia(Palabra* palabra){
+	if(!palabra)
+		return 0;
+	if(palabra->size == 0)
+		return 1;
+	return 0;
+}

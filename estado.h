@@ -157,7 +157,7 @@ int inserta_transicion(Estado* estado, Transicion * tran);
 int imprime_estado(Estado* estado);
 
 
-
+char* buscar_transicion(Estado* estado, char* valor);
 
 
 #endif //ESTADO

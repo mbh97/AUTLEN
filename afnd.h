@@ -1,5 +1,5 @@
-#ifndef AFND
-#define AFND
+#ifndef _AFND_
+#define _AFND_
 
 #include <stdio.h>
 #include <string.h>
@@ -13,8 +13,8 @@
 #define ERROR -1
 #define TAM 256
 
-
-typedef struct AFND {
+typedef struct _AFND AFND;
+/*typedef struct AFND {
 	char* nombre;
 	Alfabeto* alf;
 	int talf; //numero de simbolos
@@ -23,7 +23,7 @@ typedef struct AFND {
 	Palabra* palabra;
 	char** actuales;
 	int nact;
-} AFND;
+} AFND;*/
 
 
 /********************************************************************************
@@ -80,7 +80,7 @@ void AFNDImprime(FILE * fd, AFND* p_afnd);
 
 
  *********************************************************************************/
-int AFNDInsertaSimbolo(AFND * p_afnd, char* simbolo);
+AFND * AFNDInsertaSimbolo(AFND * p_afnd, char* simbolo);
 
 /********************************************************************************
 	Funcion: AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo)
@@ -146,6 +146,8 @@ void AFNDImprimeCadenaActual(FILE *fd, AFND * p_afnd);
 AFND * AFNDInicializaEstado (AFND * p_afnd);
 void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd);
 void AFNDTransita(AFND * p_afnd);
+Estado* buscar_estado(AFND * p_afnd, char* nombre);
+int es_repeticion(char* siguiente, char**aux, int naux);
 
 
 #endif //AFND

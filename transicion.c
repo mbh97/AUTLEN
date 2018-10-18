@@ -92,14 +92,3 @@ char* get_estado(Transicion* transicion){
 		return NULL;
 	return transicion->estado;
 }
-
-Transicion* copiar_transicion(Transicion * transicion){
-	Transicion* copia = NULL;
-	if(!transicion)
-		return NULL;
-
-	copia = crear_transicion(get_valor(transicion),get_estado(transicion));
-	if(!copia)
-		return NULL;
-	return copia;
-}

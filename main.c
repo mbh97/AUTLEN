@@ -5,11 +5,6 @@
 
 #include "afnd.h"
 
-/* ESTOS INCLUDES DEPENDEN DE LA IMPLEMENTACIÓN, TAL VEZ TÚ DISEÑES OTROS MÓDULOS */
-#include "alfabeto.h"
-#include "estado.h"
-#include "palabra.h"
-
 
 int main(int argc, char ** argv)
 {
