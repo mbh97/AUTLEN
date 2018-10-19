@@ -10,6 +10,10 @@ int main(int argc, char const *argv[]){
 		printf("ERROR");
 		return -1;
 	}
+	insertar_estadoFinal(t, "q1");
+	printf("inserta estado final..\n");
+
+	imprimir_transicion(t);
 	printf("Elimina transicion..\n");
 	salida = eliminar_transicion(t);
 	if(salida == -1){

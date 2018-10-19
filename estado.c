@@ -148,7 +148,7 @@ int get_ntran(Estado* estado){
 
 
  *********************************************************************************/
-char* funcion_transicion(Estado* e, char* valor){
+char** funcion_transicion(Estado* e, char* valor){
 	int i = 0, ntran;
 	Transicion**transiciones;
 	ntran = get_ntran(e);
@@ -156,9 +156,9 @@ char* funcion_transicion(Estado* e, char* valor){
 		return NULL;
 	transiciones = get_transiciones(e);
 	for(i=0; i<ntran; i++)
-		if(!strcmp(valor,get_valor(transiciones[i])))
-			return get_estado(transiciones[i]);
-	
+		if(!strcmp(valor,get_valor(transiciones[i]))){
+			return get_finales(transiciones[i]);
+		}
 	return NULL;
 }
 
@@ -176,6 +176,7 @@ char* funcion_transicion(Estado* e, char* valor){
 
  *********************************************************************************/
 int imprime_estado(Estado* estado){
+	int i =0;
 	if(!estado)
 		return ERROR;
  	if(estado->tipo==INICIAL)
@@ -186,6 +187,10 @@ int imprime_estado(Estado* estado){
 		printf("E = { %s, FINAL }\n", estado->nombre);
 	if(estado->tipo==INICIAL_Y_FINAL)
 		printf("E = { %s, INICIAL_Y_FINAL }\n", estado->nombre);
+	printf("Transiciones: \n");
+	for(i=0; i<estado->ntran; i++){
+		imprimir_transicion(estado->transiciones[i]);
+	}
 	return OK;
 }
 
@@ -202,10 +207,22 @@ int imprime_estado(Estado* estado){
 
 
  *********************************************************************************/
-int inserta_transicion(Estado* estado, Transicion * tran){
-	Transicion ** aux =  NULL;
-	if(!tran || !estado)
+int inserta_transicion(Estado* estado, char* valor, char*final){
+	Transicion ** aux= NULL, **tran =  NULL;
+	int i = 0, ntran;
+	if(!valor || !estado || !final){
 		return ERROR;
+	}
+	ntran = get_ntran(estado);
+	if(ntran>0){
+		tran = get_transiciones(estado);
+		for(i = 0; i<ntran;i++){
+			if(!strcmp(valor,get_valor(tran[i]))){
+				insertar_estadoFinal(tran[i], final);
+				return OK;
+			}
+		}
+	}
 	estado->ntran += 1;
 	aux = (Transicion **)realloc(estado->transiciones, estado->ntran*(sizeof(Transicion*)));
 	if (!aux) {
@@ -213,12 +230,28 @@ int inserta_transicion(Estado* estado, Transicion * tran){
 		return ERROR;
 	}
 	estado->transiciones=aux;
-	estado->transiciones[estado->ntran-1] = tran;
+	estado->transiciones[estado->ntran-1] = crear_transicion(valor, final);
 	return OK;
 }
 
+int get_nfinales_transicion(Estado* estado, char* valor){
+	int ntran, i;
+	Transicion **trans;
+	if(!estado || !valor)
+		return -1;
+	ntran = get_ntran(estado);
+	if(ntran==0){
+		return -1;
+	}
+	trans = get_transiciones(estado);
+	for(i = 0; i<ntran; i++){
+		if(!strcmp(get_valor(trans[i]),valor))
+			return get_nfinales(trans[i]);
+	}
+	return -1;
+}
 
-char* buscar_transicion(Estado* estado, char* valor){
+char** buscar_transicion(Estado* estado, char* valor){
 	int ntran, i;
 	Transicion **trans;
 	if(!estado || !valor)
@@ -230,7 +263,7 @@ char* buscar_transicion(Estado* estado, char* valor){
 	trans = get_transiciones(estado);
 	for(i = 0; i<ntran; i++){
 		if(!strcmp(get_valor(trans[i]),valor))
-			return get_estado(trans[i]);
+			return get_finales(trans[i]);
 	}
 	return NULL;
 }

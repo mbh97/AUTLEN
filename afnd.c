@@ -112,8 +112,8 @@ Salida:
 
  *********************************************************************************/
 void AFNDImprime(FILE * fd, AFND* p_afnd){
-	int i =0, k=0;
-	char * valor, *inicial, *final;
+	int i =0, k=0, j= 0, nfinales;
+	char * valor, *inicial, **finales;
 	if(!p_afnd || !fd){
 		return;
 	}
@@ -141,11 +141,15 @@ void AFNDImprime(FILE * fd, AFND* p_afnd){
 		inicial = get_nombre(p_afnd->est[i]);
 		for(k = 0; k<p_afnd->talf; k++){
 			valor = p_afnd->alf->simbolos[k];
-			final = buscar_transicion(p_afnd->est[i], valor);
-			if(!final)
+			finales = funcion_transicion(p_afnd->est[i], valor);
+			if(!finales)
 				fprintf(fd, "\t\tf(%s,%s)={ }\n",inicial,valor);
 			else{
-				fprintf(fd, "\t\tf(%s,%s)={ %s }\n",inicial,valor,final);
+				nfinales = get_nfinales_transicion(p_afnd->est[i],valor);
+				fprintf(fd, "\t\tf(%s,%s)={",inicial,valor);
+				for(j = 0;j<nfinales;j++)
+					fprintf(fd, " %s", finales[j]);
+				fprintf(fd, " }\n");
 			}
 		}
 	}
@@ -190,17 +194,20 @@ AFND * AFNDInsertaSimbolo(AFND * p_afnd, char * simbolo){
  *********************************************************************************/
 AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo){
   int i = 0;
-	if(!p_afnd || !nombre)
+	if(!p_afnd || !nombre){
 		return NULL;
+	}
 	if(!p_afnd->est[i]){
 		p_afnd->est[i]= crear_estado(nombre, tipo);
 		return p_afnd;
 	}
 	while(p_afnd->est[i]){
 		i+=1;
-		if(i==p_afnd->nest)
+		if(i==p_afnd->nest){
 			return NULL; //  completo
+		}
 	}
+	printf("entra aqui\n");
 	p_afnd->est[i]= crear_estado(nombre, tipo);
 	return p_afnd;
 }
@@ -218,10 +225,14 @@ AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo){
 
 *********************************************************************************/
 AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra){
-	if(!p_afnd || !letra)
+	if(!p_afnd || !letra){
+		printf("mal\n");
 		return NULL;
-	if(insertar_letra(letra, p_afnd->palabra))
+	}
+	if(insertar_letra(letra, p_afnd->palabra)){
+		printf("bien\n");
 		return p_afnd;
+	}
 	return NULL;
 }
 
@@ -267,15 +278,15 @@ Estado* buscar_estado(AFND * p_afnd, char* nombre){
 
 AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombre_simbolo_entrada, char * nombre_estado_f ){
 	Estado* estado_i  = NULL;
-	Transicion* tran = NULL;
 	if(!p_afnd||!nombre_estado_i ||!nombre_simbolo_entrada||!nombre_estado_f)
 		return NULL;
 	estado_i = buscar_estado(p_afnd, nombre_estado_i);
 	if(!estado_i)
 		return NULL;
-	tran = crear_transicion(nombre_simbolo_entrada, nombre_estado_f);
-	if(!inserta_transicion(estado_i, tran))
+	if(!inserta_transicion(estado_i,nombre_simbolo_entrada, nombre_estado_f)){
+		printf("aqui\n");
 		return NULL;
+	}
 	return p_afnd;
 }
 
@@ -340,10 +351,10 @@ AFND * AFNDInicializaEstado (AFND * p_afnd){
 }
 
 void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd){
-	char *actual, *siguiente;
+	char *actual, **siguientes, *valor;
 	Estado * estado_actual;
 	char ** aux = NULL;
-	int naux = 0, i;
+	int naux = 0, i, j, nsiguientes;
 	if(es_vacia(p_afnd->palabra))
 		return;
 	AFNDImprimeConjuntoEstadosActual(fd, p_afnd);
@@ -351,18 +362,22 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd){
 	for(i=0; i<p_afnd->nact; i++){
 		actual = p_afnd->actuales[i];
 		estado_actual = buscar_estado(p_afnd, actual);
-		siguiente = funcion_transicion(estado_actual, get_primer(p_afnd->palabra));
-		if(siguiente){
-			if(naux != 0){
-				if(!es_repeticion(siguiente, aux, naux)){
-					naux +=1;
-					aux = (char **)realloc(aux, naux*(sizeof(char *)));
-					strcpy(aux[naux-1], siguiente);
-				}		
-			}
-			naux +=1;
-			aux = (char **)realloc(aux, naux*(sizeof(char *)));
-			strcpy(aux[naux-1], siguiente);
+		valor = get_primer(p_afnd->palabra);
+		siguientes = funcion_transicion(estado_actual, valor);
+		if(siguientes){
+			nsiguientes = get_nfinales_transicion(estado_actual,valor);
+			for(j=0; j<nsiguientes; j++){	
+				if(naux != 0){
+					if(!es_repeticion(siguientes[j], aux, naux)){
+						naux +=1;
+						aux = (char **)realloc(aux, naux*(sizeof(char *)));
+						strcpy(aux[naux-1], siguientes[j]);
+					}		
+				}
+				naux +=1;
+				aux = (char **)realloc(aux, naux*(sizeof(char *)));
+				strcpy(aux[naux-1], siguientes[j]);
+				}
 		}
 	}
 	AFNDeliminaActuales(p_afnd);

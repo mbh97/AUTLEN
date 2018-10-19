@@ -12,7 +12,8 @@
 
 typedef struct Transicion {
 	char* valor; // valor de la transicion
-	char * estado; // estado final de la transicion
+	char ** finales; // estados finales de la transicion
+	int nfinales;
 } Transicion;
 
 /********************************************************************************
@@ -70,10 +71,14 @@ char* get_valor(Transicion* transicion);
 
 
  *********************************************************************************/
-char* get_estado(Transicion* transicion);
+char** get_finales(Transicion* transicion);
+
+int get_nfinales(Transicion* transicion);
+
+void insertar_estadoFinal(Transicion* transicion, char* final);
 
 
-
+void imprimir_transicion(Transicion * t);
  
  
 

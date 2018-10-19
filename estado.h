@@ -125,7 +125,7 @@ int get_ntran(Estado* estado);
 
 
  *********************************************************************************/
-char* funcion_transicion(Estado* e, char* valor);
+char** funcion_transicion(Estado* e, char* valor);
 
  /********************************************************************************
 	Funcion: inserta_transicion
@@ -140,7 +140,7 @@ char* funcion_transicion(Estado* e, char* valor);
 
 
  *********************************************************************************/
-int inserta_transicion(Estado* estado, Transicion * tran);
+int inserta_transicion(Estado* estado, char* valor, char*final);
 
  /********************************************************************************
 	Funcion: imprime_estado
@@ -156,8 +156,10 @@ int inserta_transicion(Estado* estado, Transicion * tran);
  *********************************************************************************/
 int imprime_estado(Estado* estado);
 
+int get_nfinales_transicion(Estado* estado, char* valor);
 
-char* buscar_transicion(Estado* estado, char* valor);
+
+char** buscar_transicion(Estado* estado, char* valor);
 
 
 #endif //ESTADO
