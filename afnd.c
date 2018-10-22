@@ -103,9 +103,7 @@ Salida:
 		free(p_afnd->actuales[i]);
 	free(p_afnd->actuales);
 
-	if(eliminar_alfabeto(p_afnd->alf))
-		return;
-
+	eliminar_alfabeto(p_afnd->alf);
 	eliminar_palabra(p_afnd->palabra);
 	free(p_afnd->nombre);
 	free(p_afnd);
