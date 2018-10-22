@@ -34,6 +34,7 @@ Salida:
 	afnd=(AFND *)malloc(sizeof(AFND));
 	if(!afnd)
 		return NULL;
+
 	afnd->alf = crear_alfabeto(num_simbolos);
 	if(!afnd->alf){
 		free(afnd);
@@ -46,9 +47,9 @@ Salida:
 		free(afnd);
 		return NULL;
 	}
-	for(i = 0; i<num_estados; i++){
+	for(i = 0; i<num_estados; i++)
 		afnd->est[i] = NULL;
-	}
+
 	afnd->nombre = (char*)malloc(TAM*sizeof(char));
 	if(!afnd->nombre){
 		free(afnd->est);
@@ -56,6 +57,8 @@ Salida:
 		free(afnd);
 		return NULL;
 	}
+	strcpy(afnd->nombre, nombre);
+
 	afnd->palabra = crear_palabra();
 	if(!afnd->palabra){
 		free(afnd->nombre);
@@ -64,9 +67,10 @@ Salida:
 		free(afnd);
 		return NULL;
 	}
+
 	afnd->talf = num_simbolos;
 	afnd->nest = num_estados;
-	strcpy(afnd->nombre, nombre);
+	
 	afnd->actuales = NULL;
 	afnd->nact = 0;
 
@@ -87,22 +91,23 @@ Salida:
  *********************************************************************************/
  void AFNDElimina(AFND * p_afnd){
 	int i = 0;
-	printf("hola\n");
+
 	if(!p_afnd)
 		return;
+
 	for(i = 0; i < p_afnd->nest; i++)
-		if(eliminar_estado(p_afnd->est[i]) == ERROR){
-      		return;
-    }
+		eliminar_estado(p_afnd->est[i]);
     free(p_afnd->est);
+
     for(i = 0; i < p_afnd->nact; i++)
 		free(p_afnd->actuales[i]);
-
-	if(eliminar_alfabeto(p_afnd->alf)  == ERROR);
-		return;
-	free(p_afnd->nombre);
-	eliminar_palabra(p_afnd->palabra);
 	free(p_afnd->actuales);
+
+	if(eliminar_alfabeto(p_afnd->alf))
+		return;
+
+	eliminar_palabra(p_afnd->palabra);
+	free(p_afnd->nombre);
 	free(p_afnd);
 	return;
 }
@@ -119,9 +124,11 @@ Salida:
 void AFNDImprime(FILE * fd, AFND* p_afnd){
 	int i =0, k=0, j= 0, nfinales;
 	char * valor, *inicial, **finales;
+
 	if(!p_afnd || !fd){
 		return;
 	}
+
 	fprintf(fd, "%s={\n", p_afnd->nombre);
 	imprime_alfabeto(fd, p_afnd->alf);
 	fprintf(fd, "num_estados = %d\n", p_afnd->nest);
@@ -356,14 +363,17 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd){
 	Estado * estado_actual;
 	char ** aux = NULL;
 	int naux = 0, i, j, nsiguientes;
+
 	if(es_vacia(p_afnd->palabra)){
 		AFNDImprimeConjuntoEstadosActual(fd, p_afnd);
 		imprime_palabra(fd, p_afnd->palabra);
 		AFNDeliminaActuales(p_afnd);
 		return;
 	}
+
 	AFNDImprimeConjuntoEstadosActual(fd, p_afnd);
 	imprime_palabra(fd, p_afnd->palabra);
+	
 	for(i=0; i<p_afnd->nact; i++){
 		actual = p_afnd->actuales[i];
 		estado_actual = buscar_estado(p_afnd, actual);
@@ -394,6 +404,7 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd){
 		AFNDInsertaActuales(p_afnd, aux[i]);
 		free(aux[i]);
 	}
+	
 	free(aux);
 	AFNDTransita(p_afnd);
 	AFNDProcesaEntrada(fd,p_afnd);

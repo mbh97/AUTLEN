@@ -14,9 +14,10 @@
 
  *********************************************************************************/
  Transicion* crear_transicion(char* valor, char * final){
+ 	Transicion* transicion = NULL;
 	if(!valor || !final)
 		return NULL;
-	Transicion* transicion = NULL;
+
 	transicion = (Transicion*)malloc(sizeof(Transicion));
 	if(!transicion)
 		return NULL;
@@ -37,6 +38,7 @@
 		return NULL;
 	}
 	strcpy(transicion->valor, valor);
+	
 	return transicion;
  }
  

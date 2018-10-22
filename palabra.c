@@ -43,8 +43,8 @@ int eliminar_palabra(Palabra* palabra){
 		for(i = 0; i < palabra->size; i++)
 			if(palabra->simbolos[i])
 				free(palabra->simbolos[i]);
-		free(palabra->simbolos);
 	}
+	free(palabra->simbolos);
 	palabra->size = 0;
 	free(palabra);
 	return OK;
@@ -90,17 +90,10 @@ int insertar_letra(char* simbolo, Palabra* palabra){
 	aux = (char **)realloc(palabra->simbolos, palabra->size*(sizeof(char *)));
 	if (!aux) {
 		palabra->size -= 1;
-		printf("1\n");
 		return ERROR;
 	}
 	palabra->simbolos=aux;
 	palabra->simbolos[palabra->size-1] = (char*)malloc(TAM*sizeof(char));
-	if(!palabra->simbolos[palabra->size-1]){
-		printf("2\n");
-		palabra->size -= 1;
-		aux = (char **)realloc(palabra->simbolos, palabra->size*(sizeof(char *))); //revisar!!!!
-		return ERROR;
-	}
 	strcpy(palabra->simbolos[palabra->size-1], simbolo);
 	return OK;
 }
@@ -151,12 +144,12 @@ int imprime_palabra(FILE *fd,Palabra* a){
 	int i = 0;
 	if(!a)
 		return ERROR;	
-	printf("[(%d)",a->size);
+	fprintf(fd,"[(%d)",a->size);
 	while(i<a->size){
-		printf(" %s",a->simbolos[i]);
+		fprintf(fd, " %s",a->simbolos[i]);
 		i+=1;
 	}
-	printf("]\n");
+	fprintf(fd,"]\n");
 	return OK;
 }
 

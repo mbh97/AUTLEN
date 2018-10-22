@@ -22,14 +22,16 @@
  	estado = (Estado*)malloc(sizeof(Estado));
  	if(!estado)
  		return NULL;
+
  	estado->nombre=(char*)malloc(TAM*sizeof(char));
  	if(!estado->nombre){
  		free(estado);
  		return NULL;
  	}
+ 	strcpy(estado->nombre,nombre);
+
  	estado->transiciones = NULL;
  	estado->ntran = 0;
- 	strcpy(estado->nombre,nombre);
  	estado->tipo = tipo;
  	return estado;
  }
@@ -156,9 +158,8 @@ char** funcion_transicion(Estado* e, char* valor){
 		return NULL;
 	transiciones = get_transiciones(e);
 	for(i=0; i<ntran; i++)
-		if(!strcmp(valor,get_valor(transiciones[i]))){
+		if(!strcmp(valor,get_valor(transiciones[i])))
 			return get_finales(transiciones[i]);
-		}
 	return NULL;
 }
 
