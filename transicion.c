@@ -59,6 +59,7 @@ int eliminar_transicion(Transicion* transicion){
 	for(i=0; i<transicion->nfinales; i++){
 		free(transicion->finales[i]);
 	}
+	free(transicion->finales);
 	free(transicion->valor);
 	free(transicion);
 	return OK;

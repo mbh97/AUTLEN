@@ -45,6 +45,7 @@ int eliminar_palabra(Palabra* palabra){
 				free(palabra->simbolos[i]);
 		free(palabra->simbolos);
 	}
+	palabra->size = 0;
 	free(palabra);
 	return OK;
 
@@ -121,12 +122,14 @@ int eliminar_letra(Palabra* palabra){
 	int i = 0;
 	if(!palabra)
 		return ERROR;
-	if(palabra->size == 1)
-		return eliminar_palabra(palabra);
+	if(palabra->size == 1){
+		free(palabra->simbolos[0]);
+		palabra->size = 0;
+		return OK;
+	}
 	for(i = 1; i< palabra->size; i++){
 		strcpy(palabra->simbolos[i-1], palabra->simbolos[i]);
 	}
-	printf("Soy un simbolo %s\n", palabra->simbolos[i-1]);
 	free(palabra->simbolos[i-1]);
 	palabra->size -=1;
 	return OK;
