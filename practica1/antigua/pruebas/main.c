@@ -3,7 +3,7 @@
 #include <string.h>
 
 
-#include "afnd.h"
+#include "../afnd.h"
 
 
 int main(int argc, char ** argv)

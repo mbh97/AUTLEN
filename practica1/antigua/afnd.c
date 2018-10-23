@@ -479,7 +479,7 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd){
 	}
 	
 	free(aux);
-	AFNDTransita(p_afnd);
+	AFNDTransita(p_afnd); /* Elimina de la palabra el simbolo que se acaba de procesar */
 	AFNDProcesaEntrada(fd,p_afnd);
 }
 
