@@ -1,6 +1,12 @@
 
 #include "alfabeto.h"
 
+struct Alfabeto {
+	char ** simbolos; /* Simbolos del alfabeto*/
+	int size; /* Numero de simbolos del alfabeto */
+};
+
+
 /********************************************************************************
 	Funcion: crear_alfabeto
 	Descripcion: crea un alfabeto
@@ -79,6 +85,26 @@ int size_alfabeto(Alfabeto* alfabeto){
 }
 
  /********************************************************************************
+	Funcion: devuelve simbolo de un alfabeto dada una posicion
+	Descripcion: consigue el simbolo de un alfabeto
+	Argumentos:
+				-Alfabeto* alfabeto
+				- int posicion
+	Salida:
+				- simbolo del alfabeto
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
+char* get_simbolo_pos(int posicion, Alfabeto* alf){
+	if(!alf || posicion >= alf->size || posicion < 0){
+		return NULL;
+	}
+	return alf->simbolos[posicion];
+}
+
+ /********************************************************************************
 	Funcion: insertar_simbolo
 	Descripcion: inserta un simbolo en un alfabeto
 	Argumentos:
@@ -109,6 +135,7 @@ int insertar_simbolo(char* simbolo, Alfabeto* a){
 	strcpy(a->simbolos[i], simbolo);
 	return OK;
 }
+
 
  /********************************************************************************
 	Funcion: imprime_alfabeto

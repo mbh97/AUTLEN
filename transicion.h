@@ -5,16 +5,11 @@
 #include <string.h>
 #include <stdlib.h>
 
-//CONSTANTES
 #define OK 0
 #define ERROR -1
 #define TAM 256
 
-typedef struct Transicion {
-	char* valor; // valor de la transicion
-	char ** finales; // estados finales de la transicion
-	int nfinales;
-} Transicion;
+typedef struct Transicion Transicion;
 
 /********************************************************************************
 	Funcion: crear_transicion
@@ -60,12 +55,12 @@ int eliminar_transicion(Transicion* transicion);
 char* get_valor(Transicion* transicion);
 
 /********************************************************************************
-	Funcion: get_estado
+	Funcion: get_finales
 	Descripcion: consigue el estado final de una transicion
 	Argumentos: 
 				-Transicion* transicion: 
 	Salida:
-				- estado de una transicion
+				- simbolos finales de una transicion
 				- ERROR en otro caso
 
 
@@ -73,13 +68,32 @@ char* get_valor(Transicion* transicion);
  *********************************************************************************/
 char** get_finales(Transicion* transicion);
 
+/********************************************************************************
+	Funcion: get_nfinales
+	Descripcion: consigue el numero de estado final de una transicion
+	Argumentos: 
+				-Transicion* transicion: 
+	Salida:
+				- numero de simbolos finales de una transicion
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
 int get_nfinales(Transicion* transicion);
 
+/********************************************************************************
+	Funcion: insertar_estadoFinal
+	Descripcion: inserta un estado final a una transicion
+	Argumentos: 
+				-Transicion* transicion
+				- char* final
+	Salida:
+				
+
+
+ *********************************************************************************/
 void insertar_estadoFinal(Transicion* transicion, char* final);
-
-
-void imprimir_transicion(Transicion * t);
- 
  
 
 #endif

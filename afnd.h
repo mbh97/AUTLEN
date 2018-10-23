@@ -8,22 +8,11 @@
 #include "estado.h"
 #include "palabra.h"
 
-//CONSTANTES
 #define OK 0
 #define ERROR -1
 #define TAM 256
 
 typedef struct _AFND AFND;
-/*typedef struct AFND {
-	char* nombre;
-	Alfabeto* alf;
-	int talf; //numero de simbolos
-	int nest; //numero estados
-	Estado** est;
-	Palabra* palabra;
-	char** actuales;
-	int nact;
-} AFND;*/
 
 
 /********************************************************************************
@@ -123,31 +112,150 @@ AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra);
 
 void AFNDImprimeConjuntoEstadosActual(FILE * fd, AFND * p_afnd);
 
+/********************************************************************************
+ Funcion: AFNDInsertaTransicion
+ Descripcion: inserta una transicion en el automata
+ Argumentos:
+       - AFND * p_afnd
+       - char * nombre_estado_i
+       - char * nombre_simbolo_entrada
+       - char * nombre_estado_f
+
+ Salida:
+       - AFND* si todo ha salido bien
+       - NULL en otro caso
+
+
+
+*********************************************************************************/
+AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombre_simbolo_entrada, char * nombre_estado_f);
+
  /********************************************************************************
-	Funcion: imprime_alfabeto
-	Descripcion: imprime un alfabeto
+	Funcion: AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo)
+	Descripcion: inserta un estado
 	Argumentos:
-				- FILE* file
-				- Alfabeto* a
+				- AFND * p_afnd
+		        -char * nombre
+		        -int tipo
 	Salida:
-				- OK si todo ha salido bien
-				- ERROR en otro caso
+       			- AFND * p_afnd
+				- NULL otro caso
 
 
 
  *********************************************************************************/
-int imprime_alfabeto(FILE* file, Alfabeto* a);
-
-
-AFND * AFNDInsertaTransicion(AFND * p_afnd, char * nombre_estado_i, char * nombre_simbolo_entrada, char * nombre_estado_f);
 AFND * AFNDInsertaActuales(AFND * p_afnd, char * nombre);
+
+ /********************************************************************************
+	Funcion: AFNDeliminaActuales
+	Descripcion: elimina un estado actual
+	Argumentos:
+				- AFND * p_afnd
+		        
+	Salida:
+       			- AFND * p_afnd
+				- NULL otro caso
+
+
+
+ *********************************************************************************/
 AFND * AFNDeliminaActuales(AFND * p_afnd);
-void AFNDImprimeCadenaActual(FILE *fd, AFND * p_afnd);
+
+ /********************************************************************************
+	Funcion: AFNDInicializaEstado
+	Descripcion: inicializa el estado actual del autonoma a aquellos que sea de tipo INICIAL o 
+				INICIAL_Y_FINAL
+	Argumentos:
+				- AFND * p_afnd
+		        
+	Salida:
+       			- AFND * p_afnd
+				- NULL otro caso
+
+
+
+ *********************************************************************************/
 AFND * AFNDInicializaEstado (AFND * p_afnd);
+
+ /********************************************************************************
+	Funcion: AFNDImprimeCadenaActual
+	Descripcion: imprime cadena actual a procesar
+	Argumentos:
+				- FILE *fd
+				- AFND * p_afnd
+
+
+
+
+ *********************************************************************************/
+void AFNDImprimeCadenaActual(FILE *fd, AFND * p_afnd);
+
+ /********************************************************************************
+	Funcion: AFNDProcesaEntrada
+	Descripcion: funcion recursiva que procesa una palabra
+	Argumentos:
+				- FILE *fd
+				- AFND * p_afnd
+
+
+
+
+ *********************************************************************************/
 void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd);
+
+ /********************************************************************************
+	Funcion: AFNDTransita
+	Descripcion: elimina una letra de la palabra porque ya se ha procesado
+	Argumentos:
+				- AFND * p_afnd
+
+
+
+
+ *********************************************************************************/
 void AFNDTransita(AFND * p_afnd);
+
+
+/********************************************************************************
+	Funcion: imprime_estados
+  	Descripcion: funcion auxiliar para imprimir los estados de un afnd
+	Argumentos:
+				- FILE * fd = fichero donde lo imprime
+        		  AFND* p_afnd = afnd a imprimir
+
+
+ *********************************************************************************/
+void imprime_estados(FILE * fd, AFND* p_afnd);
+
+/********************************************************************************
+ Funcion: buscar_estado
+ Descripcion: busca un estado a partir de un nombre
+ Argumentos:
+       - AFND * p_afnd
+       - char* nombre
+ Salida:
+       - Estado encontrado
+       - NULL en otro caso
+
+
+
+*********************************************************************************/
 Estado* buscar_estado(AFND * p_afnd, char* nombre);
+
+/********************************************************************************
+	Funcion: es_repeticion
+  	Descripcion: funcion auxiliar para comprobar si un simbolo ya pertenece
+  				al conjunto de simbolos que se convertiran en actuales
+  				para ser procesados por el automata
+	Argumentos:
+				- char* siguiente
+        		- char**aux
+        		- int naux
+	Salida:
+				- 1 si es repeticion
+				- 0 en caso contrario
+
+ *********************************************************************************/
 int es_repeticion(char* siguiente, char**aux, int naux);
 
-
-#endif //AFND
+#endif

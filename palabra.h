@@ -5,16 +5,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-//CONSTANTES
 #define OK 0
 #define ERROR -1
 #define TAM 256
 
 
-typedef struct Palabra {
-	char ** simbolos; // array de simbolos
-	int size; // tamanno de la palabra
-} Palabra;
+typedef struct Palabra Palabra;
 
 
 /********************************************************************************
@@ -57,6 +53,32 @@ int eliminar_palabra(Palabra* palabra);
 
  *********************************************************************************/
 int size_palabra(Palabra* palabra);
+
+ /********************************************************************************
+	Funcion: get_primer
+	Descripcion: devuelve el primer elemento de la palabra
+	Argumentos: 
+				- Palabra* a
+	Salida:
+				- primer elemento de la cadena
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
+char* get_primer(Palabra* palabra);
+
+ /********************************************************************************
+	Funcion: es_vacia
+	Descripcion: comprueba que una palabra esta vacia
+	Argumentos: 
+				- Palabra* a
+	Salida:
+				- 1 si es vacia
+				- 0 en otro caso
+
+ *********************************************************************************/
+int es_vacia(Palabra* palabra);
 
  /********************************************************************************
 	Funcion: insertar_letra
@@ -103,20 +125,4 @@ int eliminar_letra(Palabra* palabra);
  *********************************************************************************/
 int imprime_palabra(FILE *fd,Palabra* a);
 
- /********************************************************************************
-	Funcion: get_primer
-	Descripcion: devuelve el primer elemento de la palabra
-	Argumentos: 
-				- Palabra* a
-	Salida:
-				- primer elemento de la cadena
-				- ERROR en otro caso
-
-
-
- *********************************************************************************/
-char* get_primer(Palabra* palabra);
-
-int es_vacia(Palabra* palabra);
-
-#endif //PALABRA
+#endif

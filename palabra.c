@@ -1,6 +1,10 @@
 
 #include "palabra.h"
 
+struct Palabra {
+	char ** simbolos; /* array de simbolos (letras) */
+	int size; /* tamanno de la palabra */
+};
 
 /********************************************************************************
 	Funcion: crear_palabra
@@ -69,6 +73,41 @@ int size_palabra(Palabra* palabra){
 	return palabra->size;
 }
 
+ /********************************************************************************
+	Funcion: get_primer
+	Descripcion: devuelve el primer elemento de la palabra
+	Argumentos: 
+				- Palabra* a
+	Salida:
+				- primer elemento de la cadena
+				- NULL en otro caso
+
+
+
+ *********************************************************************************/
+char* get_primer(Palabra* palabra){
+	if(!palabra)
+		return NULL;
+	return palabra->simbolos[0];
+}
+
+ /********************************************************************************
+	Funcion: es_vacia
+	Descripcion: comprueba que una palabra esta vacia
+	Argumentos: 
+				- Palabra* a
+	Salida:
+				- 1 si es vacia
+				- 0 en otro caso
+
+ *********************************************************************************/
+int es_vacia(Palabra* palabra){
+	if(!palabra)
+		return 0;
+	if(palabra->size == 0)
+		return 1;
+	return 0;
+}
  /********************************************************************************
 	Funcion: insertar_letra
 	Descripcion: inserta un simbolo en un palabra
@@ -151,30 +190,4 @@ int imprime_palabra(FILE *fd,Palabra* a){
 	}
 	fprintf(fd,"]\n");
 	return OK;
-}
-
- /********************************************************************************
-	Funcion: get_primer
-	Descripcion: devuelve el primer elemento de la palabra
-	Argumentos: 
-				- Palabra* a
-	Salida:
-				- primer elemento de la cadena
-				- NULL en otro caso
-
-
-
- *********************************************************************************/
-char* get_primer(Palabra* palabra){
-	if(!palabra)
-		return NULL;
-	return palabra->simbolos[0];
-}
-
-int es_vacia(Palabra* palabra){
-	if(!palabra)
-		return 0;
-	if(palabra->size == 0)
-		return 1;
-	return 0;
 }

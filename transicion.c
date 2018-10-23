@@ -1,8 +1,14 @@
 #include "transicion.h"
 
+struct Transicion {
+	char* valor; /* valor de la transicion */
+	char ** finales; /* estados finales de la transicion */
+	int nfinales; /* numero de estados finales de la transicion */
+};
+
 /********************************************************************************
 	Funcion: crear_transicion
-	Descripcion: crea una transicion
+	Descripcion: crea una transicion con valor y un estado final
 	Argumentos:
 				- char* valor: valor de la transicion
 				- char * estado: estado final de la transicion
@@ -86,12 +92,12 @@ char* get_valor(Transicion* transicion){
 }
 
 /********************************************************************************
-	Funcion: get_estado
+	Funcion: get_finales
 	Descripcion: consigue el estado final de una transicion
 	Argumentos: 
 				-Transicion* transicion: 
 	Salida:
-				- estado de una transicion
+				- simbolos finales de una transicion
 				- ERROR en otro caso
 
 
@@ -103,12 +109,35 @@ char** get_finales(Transicion* transicion){
 	return transicion->finales;
 }
 
+/********************************************************************************
+	Funcion: get_nfinales
+	Descripcion: consigue el numero de estado final de una transicion
+	Argumentos: 
+				-Transicion* transicion: 
+	Salida:
+				- numero de simbolos finales de una transicion
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
 int get_nfinales(Transicion* transicion){
 	if(!transicion)
 		return ERROR;
 	return transicion->nfinales;
 }
 
+/********************************************************************************
+	Funcion: insertar_estadoFinal
+	Descripcion: inserta un estado final a una transicion
+	Argumentos: 
+				-Transicion* transicion
+				- char* final
+	Salida:
+				
+
+
+ *********************************************************************************/
 void insertar_estadoFinal(Transicion* transicion, char* final){
 	char** aux= NULL;
 	if(!transicion || !final)
@@ -124,17 +153,4 @@ void insertar_estadoFinal(Transicion* transicion, char* final){
 	transicion->finales[transicion->nfinales-1] = (char*)malloc(TAM*sizeof(char));
 	strcpy(transicion->finales[transicion->nfinales-1], final);
 	return;
-}
-
-void imprimir_transicion(Transicion * t){
-	int i =0;
-	if(!t)
-		printf("tran = NULL");
-
-	printf("Valor: %s\n", t->valor);
-	printf("Finales: {");
-	for(i=0; i<t->nfinales; i++){
-		printf(" %s", t->finales[i]);
-	}
-	printf(" }\n");
 }

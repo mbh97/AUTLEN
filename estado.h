@@ -7,7 +7,6 @@
 #include "transicion.h"
 
 
-//CONSTANTES
 #define OK 0
 #define ERROR -1
 #define TAM 256
@@ -19,16 +18,12 @@ enum TIPO{
 	INICIAL_Y_FINAL = 3
 };
 
-typedef struct Estado {
-	char * nombre; // nombre del estado
-	enum TIPO tipo; // tipo de estado
-	Transicion** transiciones;
-	int ntran;
-} Estado;
+typedef struct Estado Estado;
+
 
 /********************************************************************************
 	Funcion: crear_estado
-	Descripcion: crea un estado
+	Descripcion: crea un estado sin transiciones
 	Argumentos: 
 				- char * nombre
 				- enum TIPO tipo
@@ -86,12 +81,12 @@ enum TIPO get_tipo(Estado* estado);
 
  /********************************************************************************
 	Funcion: get_transiciones
-	Descripcion: devuelve el numero de transiciones de un estado
+	Descripcion: devuelve las transiciones de un estado
 	Argumentos: 
 				- Estado* estado
 	Salida:
 				- Tranciones de un estado
-				- ERROR en otro caso
+				- NULL en otro caso
 
 
 
@@ -113,26 +108,12 @@ Transicion** get_transiciones(Estado* estado);
 int get_ntran(Estado* estado);
 
  /********************************************************************************
-	Funcion: funcion_transicion
-	Descripcion: devuelve el resultado de aplicar la funcion de transicion a un estado
-	Argumentos: 
-				- Estado* estado
-				- char* valor 
-	Salida:
-				- nombre del siguiente estado
-				- NULL en otro caso
-
-
-
- *********************************************************************************/
-char** funcion_transicion(Estado* e, char* valor);
-
- /********************************************************************************
 	Funcion: inserta_transicion
-	Descripcion: inserta transicion
+	Descripcion: inserta una transicion creada a partir de un valor y un estado final
 	Argumentos: 
 				- Estado* estado
-				- Transicion * tran
+				- char * valor
+				- char* final
 	Salida:
 				- OK si todo ha salido bien
 				- ERROR en otro caso
@@ -143,23 +124,54 @@ char** funcion_transicion(Estado* e, char* valor);
 int inserta_transicion(Estado* estado, char* valor, char*final);
 
  /********************************************************************************
-	Funcion: imprime_estado
-	Descripcion: imprime un estado
+	Funcion: funcion_transicion
+	Descripcion: devuelve el resultado de aplicar la funcion de transicion a un estado
 	Argumentos: 
 				- Estado* estado
+				- char* valor 
 	Salida:
-				- OK si todo ha salido bien
+				- estados resultado de la funcion
+				- NULL en otro caso
+
+
+
+ *********************************************************************************/
+char** funcion_transicion(Estado* e, char* valor);
+
+ /********************************************************************************
+	Funcion: buscar_transicion
+	Descripcion: devuelve los estados finales de la transicion de un 
+				 estado para un determinado valor
+
+	Argumentos: 
+				- Estado* estado
+				- char * valor
+	Salida:
+				- estados finales
+				- NULL en otro caso
+
+
+
+ *********************************************************************************/
+char** buscar_transicion(Estado* estado, char* valor);
+
+ /********************************************************************************
+	Funcion: get_nfinales_transicion
+	Descripcion: devuelve el numero de estados finales de la transicion de un 
+				 estado para un determinado valor
+
+	Argumentos: 
+				- Estado* estado
+				- char * valor
+	Salida:
+				- numero de estados finales
 				- ERROR en otro caso
 
 
 
  *********************************************************************************/
-int imprime_estado(Estado* estado);
-
 int get_nfinales_transicion(Estado* estado, char* valor);
 
 
-char** buscar_transicion(Estado* estado, char* valor);
 
-
-#endif //ESTADO
+#endif

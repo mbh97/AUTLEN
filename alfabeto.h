@@ -5,22 +5,16 @@
 #include <string.h>
 #include <stdlib.h>
 
-//CONSTANTES
 #define OK 0
 #define ERROR -1
 #define TAM 256
 
-
-typedef struct Alfabeto {
-	char ** simbolos; // array de simbolos
-	int size; // tamanno del alfabeto
-} Alfabeto;
-
+typedef struct Alfabeto Alfabeto;
 
 /********************************************************************************
 	Funcion: crear_alfabeto
 	Descripcion: crea un alfabeto
-	Argumentos: 
+	Argumentos:
 				-int size =  tamanno del alfabeto
 	Salida:
 				- *Alfabeto si se ha podido crear correctamente
@@ -34,7 +28,7 @@ typedef struct Alfabeto {
  /********************************************************************************
 	Funcion: eliminar_alfabeto
 	Descripcion: elimina y libera memoria reservada para un alfabeto y lo que hay dentro de este
-	Argumentos: 
+	Argumentos:
 				-Alfabeto* alfabeto = alfabeto a eliminar
 	Salida:
 				- OK si todo ha ido bien
@@ -48,8 +42,8 @@ int eliminar_alfabeto(Alfabeto* alfabeto);
  /********************************************************************************
 	Funcion: size_alfabeto
 	Descripcion: consigue el tamanno de un alfabeto
-	Argumentos: 
-				-Alfabeto* alfabeto: 
+	Argumentos:
+				-Alfabeto* alfabeto:
 	Salida:
 				- tammano del alfabeto
 				- ERROR en otro caso
@@ -60,9 +54,24 @@ int eliminar_alfabeto(Alfabeto* alfabeto);
 int size_alfabeto(Alfabeto* alfabeto);
 
  /********************************************************************************
+	Funcion: devuelve simbolo de un alfabeto dada una posicion
+	Descripcion: consigue el simbolo de un alfabeto
+	Argumentos:
+				-Alfabeto* alfabeto
+				- int posicion
+	Salida:
+				- simbolo del alfabeto
+				- ERROR en otro caso
+
+
+
+ *********************************************************************************/
+char* get_simbolo_pos(int posicion, Alfabeto* alf);
+
+ /********************************************************************************
 	Funcion: insertar_simbolo
 	Descripcion: inserta un simbolo en un alfabeto
-	Argumentos: 
+	Argumentos:
 				-char* simbolo = simbolo a insertar
 				- Alfabeto* a = alfabeto
 	Salida:
@@ -87,10 +96,11 @@ int insertar_simbolo(char* simbolo, Alfabeto* a);
 
 
  *********************************************************************************/
+
 int imprime_alfabeto(FILE* fd,  Alfabeto* a);
 
 
 
 
-#endif //ALFABETO
+#endif
 
