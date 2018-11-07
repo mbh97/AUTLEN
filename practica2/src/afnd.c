@@ -1,6 +1,6 @@
 /********************************************************************************
 
-	AUTLEN - Practica 1 
+	AUTLEN - Practica 1
 	Blanca Abella y Maria Barroso
 	Pareja 3
 
@@ -82,7 +82,7 @@ Salida:
 
 	afnd->talf = num_simbolos;
 	afnd->nest = num_estados;
-	
+
 	afnd->actuales = NULL;
 	afnd->nact = 0;
 
@@ -154,7 +154,7 @@ void AFNDImprime(FILE * fd, AFND* p_afnd){
 	imprime_alfabeto(fd, p_afnd->alf);
 	imprime_estados(fd, p_afnd);
 	imprime_lambda(fd, p_afnd->lambda);
-	
+
 	fprintf(fd,  "\tFuncion de Transición = {\n");
 	for(i=0; i<p_afnd->nest; i++){
 		inicial = get_nombre(p_afnd->est[i]);
@@ -173,7 +173,7 @@ void AFNDImprime(FILE * fd, AFND* p_afnd){
 		}
 	}
 	fprintf(fd, "\t}\n");
-	fprintf(fd, "}\n");	
+	fprintf(fd, "}\n");
 }
 
  /********************************************************************************
@@ -376,7 +376,7 @@ AFND * AFNDInsertaActuales(AFND * p_afnd, char * nombre){
 	Descripcion: elimina un estado actual
 	Argumentos:
 				- AFND * p_afnd
-		        
+
 	Salida:
        			- AFND * p_afnd
 				- NULL otro caso
@@ -414,11 +414,11 @@ void AFNDImprimeCadenaActual(FILE *fd, AFND * p_afnd){
 
  /********************************************************************************
 	Funcion: AFNDInicializaEstado
-	Descripcion: inicializa el estado actual del autonoma a aquellos que sea de tipo INICIAL o 
+	Descripcion: inicializa el estado actual del autonoma a aquellos que sea de tipo INICIAL o
 				INICIAL_Y_FINAL
 	Argumentos:
 				- AFND * p_afnd
-		        
+
 	Salida:
        			- AFND * p_afnd
 				- NULL otro caso
@@ -442,7 +442,7 @@ AFND * AFNDInicializaEstado (AFND * p_afnd){
 					}
 				}
 			}
-		}	
+		}
 	}
 	return p_afnd;
 
@@ -474,7 +474,7 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd){
 
 	AFNDImprimeConjuntoEstadosActual(fd, p_afnd);
 	imprime_palabra(fd, p_afnd->palabra);
-	
+
 	for(i=0; i<p_afnd->nact; i++){
 		actual = p_afnd->actuales[i];
 		estado_actual = buscar_estado(p_afnd, actual);
@@ -483,16 +483,16 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd){
 		if(siguientes){
 			nsiguientes = get_nfinales_transicion(estado_actual,valor);
 			for(j=0; j<nsiguientes; j++){
-				/* si hay mas de un estado final de la transicion, 
+				/* si hay mas de un estado final de la transicion,
 					entonces guardamos los estados finales en una variable
-					auxiliar para despues copiarla en los estados actuales */	
+					auxiliar para despues copiarla en los estados actuales */
 				if(naux != 0){
 					if(!es_repeticion(siguientes[j], aux, naux)){
 						naux +=1;
 						aux = (char **)realloc(aux, naux*(sizeof(char *)));
 						aux[naux-1] = (char*)malloc(TAM*sizeof(char));
 						strcpy(aux[naux-1], siguientes[j]);
-					}		
+					}
 				}
 				else{
 					naux +=1;
@@ -507,6 +507,7 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd){
 	for(i =0; i<naux; i++){
 		pos = get_posicion_estado(p_afnd,aux[i]);
 		AFNDInsertaActuales(p_afnd, aux[i]);
+		/*aplicamos las transiciones lambda a los nuevos estados actuales*/
 		for(j = 0; j<p_afnd->nest; j++){
 			if(getLvalor(p_afnd->lambda, pos, j) == 1){
 				nombre = get_nombre(p_afnd->est[j]);
@@ -517,7 +518,7 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd){
 		}
 		free(aux[i]);
 	}
-	
+
 	free(aux);
 	AFNDTransita(p_afnd); /* Elimina de la palabra el simbolo que se acaba de procesar */
 	AFNDProcesaEntrada(fd,p_afnd);
@@ -588,7 +589,17 @@ int es_repeticion(char* siguiente, char**aux, int naux){
 	return 0;
 }
 
-/* posicion */
+/********************************************************************************
+ Funcion: get_posicion_estado
+ Descripcion: obtiene la posicion de un estado en la lista de estados del afnd dado su nombre
+ Argumentos:
+			 -AFND * p_afnd = afnd
+			 -char * nombre_estado = nombre del estado del que se quiere saber la posicion
+ Salida:
+			 - numero de la posicion si todo ha ido bien
+			 - -1 en otro caso
+
+*********************************************************************************/
 int get_posicion_estado(AFND * p_afnd, char * nombre_estado){
 	int i;
 	if(!p_afnd || !nombre_estado)
@@ -599,7 +610,17 @@ int get_posicion_estado(AFND * p_afnd, char * nombre_estado){
 	}
 	return -1;
 }
+/********************************************************************************
+ Funcion: AFNDInsertaLTransicion
+ Descripcion: inserta una transicion lambda en un afnd para dos estados dados
+ Argumentos:
+			 -AFND * p_afnd = afnd
+			 -char * nombre_estado_i = nombre de un estado
+			 -char* nombre_estado_f = nombre del otro estado
+ Salida:
+			 - p_afnd modificado
 
+*********************************************************************************/
 AFND* AFNDInsertaLTransicion(AFND* p_afnd, char* nombre_estado_i, char* nombre_estado_f){
 	int i,f;
 	i = get_posicion_estado(p_afnd, nombre_estado_i);
@@ -607,13 +628,29 @@ AFND* AFNDInsertaLTransicion(AFND* p_afnd, char* nombre_estado_i, char* nombre_e
 	insertaLTransicion(p_afnd->lambda,i,f);
 	return p_afnd;
 }
+/********************************************************************************
+ Funcion: AFNDCierraLTransicion
+ Descripcion: completa la matriz de transiciones lambda aplicando las propiedades reflexiva y transitiva
+ Argumentos:
+			 -AFND * p_afnd = afnd
+ Salida:
+			 - p_afnd modificado
 
+*********************************************************************************/
 AFND* AFNDCierraLTransicion(AFND * p_afnd){
 	cierraLReflexiva(p_afnd->lambda);
 	cierraLTransitiva(p_afnd->lambda);
 	return p_afnd;
 }
+/********************************************************************************
+ Funcion: AFNDInicializaCadenaActual
+ Descripcion: vacia la palabra que acaba de ser procesada
+ Argumentos:
+			 -AFND * p_afnd = afnd
+ Salida:
+			 - p_afnd modificado
 
+*********************************************************************************/
 AFND * AFNDInicializaCadenaActual (AFND * p_afnd ){
 	int i;
 	if(!es_vacia(p_afnd->palabra)){

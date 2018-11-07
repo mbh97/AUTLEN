@@ -1,6 +1,6 @@
 /********************************************************************************
 
-	AUTLEN - Practica 1 
+	AUTLEN - Practica 1
 	Blanca Abella y Maria Barroso
 	Pareja 3
 
@@ -160,7 +160,7 @@ AFND * AFNDInsertaActuales(AFND * p_afnd, char * nombre);
 	Descripcion: elimina un estado actual
 	Argumentos:
 				- AFND * p_afnd
-		        
+
 	Salida:
        			- AFND * p_afnd
 				- NULL otro caso
@@ -172,11 +172,11 @@ AFND * AFNDeliminaActuales(AFND * p_afnd);
 
  /********************************************************************************
 	Funcion: AFNDInicializaEstado
-	Descripcion: inicializa el estado actual del autonoma a aquellos que sea de tipo INICIAL o 
+	Descripcion: inicializa el estado actual del autonoma a aquellos que sea de tipo INICIAL o
 				INICIAL_Y_FINAL
 	Argumentos:
 				- AFND * p_afnd
-		        
+
 	Salida:
        			- AFND * p_afnd
 				- NULL otro caso
@@ -266,13 +266,49 @@ Estado* buscar_estado(AFND * p_afnd, char* nombre);
 
  *********************************************************************************/
 int es_repeticion(char* siguiente, char**aux, int naux);
+/********************************************************************************
+ Funcion: get_posicion_estado
+ Descripcion: obtiene la posicion de un estado en la lista de estados del afnd dado su nombre
+ Argumentos:
+			 -AFND * p_afnd = afnd
+			 -char * nombre_estado = nombre del estado del que se quiere saber la posicion
+ Salida:
+			 - numero de la posicion si todo ha ido bien
+			 - -1 en otro caso
 
+*********************************************************************************/
 int get_posicion_estado(AFND * p_afnd, char * nombre_estado);
+/********************************************************************************
+ Funcion: AFNDInsertaLTransicion
+ Descripcion: inserta una transicion lambda en un afnd para dos estados dados
+ Argumentos:
+			 -AFND * p_afnd = afnd
+			 -char * nombre_estado_i = nombre de un estado
+			 -char* nombre_estado_f = nombre del otro estado
+ Salida:
+			 - p_afnd modificado
 
+*********************************************************************************/
 AFND* AFNDInsertaLTransicion(AFND* p_afnd, char* nombre_estado_i, char* nombre_estado_f);
+/********************************************************************************
+ Funcion: AFNDCierraLTransicion
+ Descripcion: completa la matriz de transiciones lambda aplicando las propiedades reflexiva y transitiva
+ Argumentos:
+			 -AFND * p_afnd = afnd
+ Salida:
+			 - p_afnd modificado
 
+*********************************************************************************/
 AFND* AFNDCierraLTransicion(AFND * p_afnd);
+/********************************************************************************
+ Funcion: AFNDInicializaCadenaActual
+ Descripcion: vacia la palabra que acaba de ser procesada
+ Argumentos:
+			 -AFND * p_afnd = afnd
+ Salida:
+			 - p_afnd modificado
 
+*********************************************************************************/
 AFND * AFNDInicializaCadenaActual (AFND * p_afnd );
 
 #endif
