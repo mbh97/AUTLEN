@@ -8,8 +8,8 @@
 #include "../include/lambda.h"
 
 struct Lambda {
-	int ** matriz;
-	int size;
+	int ** matriz; /*matriz para las transiciones lambda */
+	int size; /* size de la matriz (binaria) */
 };
 
 Lambda * inicializa_lambda(int size){
@@ -45,6 +45,7 @@ void elimina_lambda(Lambda * lambda){
 	for(i = 0; i < lambda->size; i++){
 		free(lambda->matriz[i]);
 	}
+	free(lambda->matriz);
 	free(lambda);
 }
 
@@ -84,13 +85,13 @@ void imprime_lambda(FILE* fd, Lambda* lambda){
 	fprintf(fd, "\tRL++*={\n");
 	fprintf(fd, "\t\t");
 	for(i = 0; i<lambda->size; i++){
-		fprintf(fd, "\t\t[%d]", i);
+		fprintf(fd, "\t[%d]", i);
 	}
 	fprintf(fd, "\n");
 	for(i = 0; i<lambda->size; i++){
 		fprintf(fd, "\t\t[%d]",i);
 		for(j=0; j<lambda->size; j++){
-			fprintf(fd, "\t\t%d", lambda->matriz[i][j]);
+			fprintf(fd, "\t%d", lambda->matriz[i][j]);
 		}
 		fprintf(fd, "\n");
 	}

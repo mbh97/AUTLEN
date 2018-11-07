@@ -435,9 +435,7 @@ AFND * AFNDInicializaEstado (AFND * p_afnd){
 		if(get_tipo(p_afnd->est[i])==INICIAL || get_tipo(p_afnd->est[i])==INICIAL_Y_FINAL){
 			AFNDInsertaActuales(p_afnd, get_nombre(p_afnd->est[i]));
 			for(j = 0; j<p_afnd->nest; j++){
-				printf("[%d,%d] = %d\n",i,j,getLvalor(p_afnd->lambda, i, j));
 				if(getLvalor(p_afnd->lambda, i, j) == 1){
-
 					nombre = get_nombre(p_afnd->est[j]);
 					if(!es_repeticion(nombre, p_afnd->actuales, p_afnd->nact)){
 						AFNDInsertaActuales(p_afnd, nombre);
@@ -467,7 +465,7 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd){
 	char ** aux = NULL;
 	int naux = 0, i, j, nsiguientes, pos;
 	/* caso base de la funcion recursiva */
-	if(es_vacia(p_afnd->palabra)){
+	if(es_vacia(p_afnd->palabra) || p_afnd->nact == 0){
 		AFNDImprimeConjuntoEstadosActual(fd, p_afnd);
 		imprime_palabra(fd, p_afnd->palabra);
 		AFNDeliminaActuales(p_afnd);
@@ -507,7 +505,6 @@ void AFNDProcesaEntrada(FILE * fd, AFND * p_afnd){
 	}
 	AFNDeliminaActuales(p_afnd);
 	for(i =0; i<naux; i++){
-		printf("actuales = %s\n",aux[i]);
 		pos = get_posicion_estado(p_afnd,aux[i]);
 		AFNDInsertaActuales(p_afnd, aux[i]);
 		for(j = 0; j<p_afnd->nest; j++){
@@ -618,5 +615,11 @@ AFND* AFNDCierraLTransicion(AFND * p_afnd){
 }
 
 AFND * AFNDInicializaCadenaActual (AFND * p_afnd ){
+	int i;
+	if(!es_vacia(p_afnd->palabra)){
+		for(i = 0; i<size_palabra(p_afnd->palabra); i++){
+			eliminar_letra(p_afnd->palabra);
+		}
+	}
 	return p_afnd;
 }
