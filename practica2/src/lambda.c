@@ -121,13 +121,16 @@ void cierraLReflexiva(Lambda*lambda){
 
  *********************************************************************************/
 void cierraLTransitiva(Lambda* lambda){
-	int i,j,z;
+	int i=0,j=0,z=0;
 	for(i = 0; i<lambda->size; i++){
 		for(j = 0; j<lambda->size; j++){
 			if(lambda->matriz[i][j] == 1){
 				for(z = 0; z<lambda->size; z++){
 					if(lambda->matriz[j][z] == 1){
-						insertaLTransicion(lambda, i,z);
+						if(lambda->matriz[i][z] != 1){
+							insertaLTransicion(lambda, i,z);
+							j=0;
+						}
 					}
 				}
 				

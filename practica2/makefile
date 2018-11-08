@@ -1,6 +1,6 @@
 CFLAGS := -g -Wall -pedantic
 CC := gcc
-EXE := main
+EXE := main prueba
 
 all: $(EXE)
 
@@ -27,6 +27,12 @@ main.o: test/main.c
 
 main: main.o afnd.o transicion.o estado.o palabra.o alfabeto.o lambda.o
 	$(CC) $(CFLAGS) main.o afnd.o transicion.o estado.o palabra.o alfabeto.o lambda.o -o main
+	
+prueba.o: test/prueba.c
+	$(CC) $(CFLAGS) -c test/prueba.c -o prueba.o
+
+prueba: prueba.o afnd.o transicion.o estado.o palabra.o alfabeto.o lambda.o
+	$(CC) $(CFLAGS) prueba.o afnd.o transicion.o estado.o palabra.o alfabeto.o lambda.o -o prueba
 
 clean:
 	rm -f *.o $(EXE)
