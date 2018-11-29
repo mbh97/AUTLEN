@@ -311,4 +311,6 @@ AFND* AFNDCierraLTransicion(AFND * p_afnd);
 *********************************************************************************/
 AFND * AFNDInicializaCadenaActual (AFND * p_afnd );
 
+int letraValida(char * letra, AFND * p_afnd);
+
 #endif

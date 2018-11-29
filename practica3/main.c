@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "alfabeto.h"
-#include "estado.h
+#include "estado.h"
 
 int main(int argc, char ** argv)
 {

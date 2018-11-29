@@ -275,6 +275,10 @@ AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra){
 	if(!p_afnd || !letra){
 		return NULL;
 	}
+	if(!letraValida(letra, p_afnd)){
+		printf("La letra %s no pertenece al alfabeto. No ha sido insertada.\n");
+		return p_afnd;
+	}
 	if(insertar_letra(letra, p_afnd->palabra) == OK){
 		return p_afnd;
 	}
@@ -659,4 +663,14 @@ AFND * AFNDInicializaCadenaActual (AFND * p_afnd ){
 		}
 	}
 	return p_afnd;
+}
+
+int letraValida(char * letra, AFND * p_afnd){
+	int i;
+	for(i = 0; i<p_afnd->talf; i++){
+		if(!strcmp(letra, p_afnd->alf[i])){
+			return 1;
+		}
+	}
+	return 0;
 }
