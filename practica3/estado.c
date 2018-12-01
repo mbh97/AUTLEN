@@ -166,7 +166,7 @@ int get_ntran(Estado* estado){
 
  *********************************************************************************/
 int inserta_transicion(Estado* estado, char* valor, char* final){
-	Transicion ** aux= NULL, **tran =  NULL;
+	Transicion **tran =  NULL;
 	int i = 0, ntran;
 	if(!valor || !estado || !final){
 		return ERROR;
@@ -185,12 +185,7 @@ int inserta_transicion(Estado* estado, char* valor, char* final){
 	o lo es para un determinado valor, 
 	entonces la creamos directamente*/
 	estado->ntran += 1;
-	aux = (Transicion **)realloc(estado->transiciones, estado->ntran*(sizeof(Transicion*)));
-	if (!aux) {
-		estado->ntran -= 1;
-		return ERROR;
-	}
-	estado->transiciones=aux;
+	estado->transiciones = (Transicion **)realloc(estado->transiciones, estado->ntran*(sizeof(Transicion*)));
 	estado->transiciones[estado->ntran-1] = crear_transicion(valor, final);
 	return OK;
 }

@@ -332,4 +332,7 @@ char ** get_estados_tipo(AFND * p_afnd, enum TIPO tipo);
 int get_n_estados_tipo(AFND * p_afnd, enum TIPO tipo);
 void free_estados_tipo(char** finales, int nfinales);
 
+AFND * insertaAUT(AFND * p_afnd, AFND * p_afnd1O_1, char* aux1);
+
+AFND * newAutomata(AFND * p_afnd1O_1, AFND * p_afnd1O_2);
 #endif

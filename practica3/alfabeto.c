@@ -26,24 +26,14 @@ struct Alfabeto {
 
 
  *********************************************************************************/
- Alfabeto* crear_alfabeto(int size){
+ Alfabeto* crear_alfabeto(){
 	Alfabeto* a = NULL;
-	int i = 0;
-	if(size < 1)
-		return NULL;
 
 	a=(Alfabeto *)malloc(sizeof(Alfabeto));
 	if(!a)
 		return NULL;
-	a->simbolos = (char **)malloc(size*sizeof(char *));
-	if(!a->simbolos){
-		free(a);
-		return NULL;
-	}
-	for(i = 0; i < size; i++){
-		a->simbolos[i] = NULL;
-	}
-	a->size = size;
+	a->simbolos = NULL;
+	a->size = 0;
 	return a;
  }
 
@@ -105,7 +95,7 @@ int size_alfabeto(Alfabeto* alfabeto){
 
  *********************************************************************************/
 char* get_simbolo_pos(int posicion, Alfabeto* alf){
-	if(!alf || posicion >= alf->size || posicion < 0){
+	if(!alf || posicion > alf->size || posicion < 0){
 		return NULL;
 	}
 	return alf->simbolos[posicion];
@@ -125,21 +115,14 @@ char* get_simbolo_pos(int posicion, Alfabeto* alf){
 
  *********************************************************************************/
 int insertar_simbolo(char* simbolo, Alfabeto* a){
-	int i = 0;
 	if(!a || !simbolo)
 		return ERROR;
-	if(!a->simbolos[i]){
-		a->simbolos[i] = (char *)malloc(TAM*sizeof(char));
-		strcpy(a->simbolos[i], simbolo);
-		return OK;
-	}
-	while(a->simbolos[i]){
-		i+=1;
-		if(i==a->size)
-			return ERROR; // alfabeto completo
-	}
-	a->simbolos[i] = (char *)malloc(TAM*sizeof(char));
-	strcpy(a->simbolos[i], simbolo);
+
+	a->size +=1;
+	a->simbolos = (char **)realloc(a->simbolos,a->size*sizeof(char*));
+
+	a->simbolos[a->size-1] = (char*)malloc(TAM*sizeof(char));
+	strcpy(a->simbolos[a->size-1], simbolo);
 	return OK;
 }
 

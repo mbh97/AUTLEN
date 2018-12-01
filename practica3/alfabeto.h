@@ -31,7 +31,7 @@ typedef struct Alfabeto Alfabeto;
 
 
  *********************************************************************************/
- Alfabeto* crear_alfabeto(int size);
+ Alfabeto* crear_alfabeto();
  
  /********************************************************************************
 	Funcion: eliminar_alfabeto
