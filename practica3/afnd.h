@@ -328,4 +328,8 @@ AFND * AFND1OEstrella(AFND * p_afnd_origen);
 /* Para la representación gráfica compatible con .dot de cualquier AFND */
 void AFNDADot(AFND * p_afnd);
 
+char ** get_estados_tipo(AFND * p_afnd, enum TIPO tipo);
+int get_n_estados_tipo(AFND * p_afnd, enum TIPO tipo);
+void free_estados_tipo(char** finales, int nfinales);
+
 #endif

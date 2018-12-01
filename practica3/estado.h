@@ -180,6 +180,6 @@ char** buscar_transicion(Estado* estado, char* valor);
  *********************************************************************************/
 int get_nfinales_transicion(Estado* estado, char* valor);
 
-
+void setTipo(Estado * e, enum TIPO tipo);
 
 #endif

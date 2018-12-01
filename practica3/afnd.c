@@ -276,7 +276,7 @@ AFND * AFNDInsertaLetra(AFND * p_afnd, char * letra){
 		return NULL;
 	}
 	if(!letraValida(letra, p_afnd)){
-		printf("La letra %s no pertenece al alfabeto. No ha sido insertada.\n");
+		printf("La letra %s no pertenece al alfabeto. No ha sido insertada.\n", letra);
 		return p_afnd;
 	}
 	if(insertar_letra(letra, p_afnd->palabra) == OK){
@@ -668,7 +668,7 @@ AFND * AFNDInicializaCadenaActual (AFND * p_afnd ){
 int letraValida(char * letra, AFND * p_afnd){
 	int i;
 	for(i = 0; i<p_afnd->talf; i++){
-		if(!strcmp(letra, p_afnd->alf[i])){
+		if(!strcmp(letra, get_simbolo_pos(i,p_afnd->alf))){
 			return 1;
 		}
 	}
@@ -679,17 +679,17 @@ int letraValida(char * letra, AFND * p_afnd){
 /* Para la creación de los AFND1Os básicos */
 
 AFND * AFND1ODeSimbolo(char * simbolo){
-	AFND * afnd = AFNDNuevo("afnd", 2, 1)
-	afnd = AFNDInsertaSimbolo(afnd, simbolo)
-	afnd = AFNDInsertaEstado(afnd, "q0", INICIAL)
-	afnd = AFNDInsertaEstado(afnd, "qf", FINAL)
-	afnd = AFNDInsertaTransicion(afnd, "q0", simbolo, "qf")
+	AFND * afnd = AFNDNuevo("afnd", 2, 1);
+	afnd = AFNDInsertaSimbolo(afnd, simbolo);
+	afnd = AFNDInsertaEstado(afnd, "q0", INICIAL);
+	afnd = AFNDInsertaEstado(afnd, "qf", FINAL);
+	afnd = AFNDInsertaTransicion(afnd, "q0", simbolo, "qf");
 	return afnd;
 }
 AFND * AFND1ODeLambda(){
-	AFND * afnd = AFNDNuevo("afnd", 2, 1)
-	afnd = AFNDInsertaEstado(afnd, "q0", INICIAL)
-	afnd = AFNDInsertaEstado(afnd, "qf", FINAL)
+	AFND * afnd = AFNDNuevo("afnd", 2, 1);
+	afnd = AFNDInsertaEstado(afnd, "q0", INICIAL);
+	afnd = AFNDInsertaEstado(afnd, "qf", FINAL);
 	afnd = AFNDInsertaLTransicion(afnd, "q0", "qf");
 	return afnd;
 }
@@ -736,20 +736,106 @@ AFND * AFNDAAFND1O(AFND * p_afnd){
 
 /* Para la creación de los AFND1Os derivados de otros mediante operadores regulares */
 AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2){
-	AFND * p_afnd = AFNDNuevo("afnd_U", 2, 1)
-	char * i1,*i2,*f1,*f2;
-	int i;
-	p_afnd = AFNDInsertaEstado(p_afnd, "UI", INICIAL);
-	p_afnd = AFNDInsertaEstado(p_afnd, "UF", FINAL);
-	for(i=0; i<p_afnd1O_1->nest; i++){
-		setNombre(p_afnd1O_1->est[i], "U1_");
-		if(get_tipo(p_afnd1O_1->est[i]) == INICIAL){
-			i1= get
+	AFND * p_afnd;
+	char *aux1 = "U1_";
+	char *aux2 = "U2_";
+	char nombreE[TAM] ="";
+	char nombreT[TAM] = "";
+	Estado * e;
+	Transicion ** t;
+	char ** f;
+	int nestados, nsimbolos, rep=0;
+	int i,j,k,posE;
+	/* CREAMOS AUTOMATA */
+	nestados = p_afnd1O_1->nest + p_afnd1O_2->nest;
+	for(i=0; i<p_afnd1O_1->talf;i++){
+		for(j=0;j<p_afnd1O_2->talf;j++){
+			if(!strcmp(get_simbolo_pos(i,p_afnd1O_1->alf), get_simbolo_pos(j,p_afnd1O_2->alf))){
+				rep +=1;
+			}
+		}
+	}
+	nsimbolos = p_afnd1O_2->talf + p_afnd1O_1->talf - rep;
+	p_afnd = AFNDNuevo("afnd_U", nestados, nsimbolos);
+	/* INSERTAMOS SIMBOLOS */
+	for(i=0;i<p_afnd1O_1->talf;i++){
+		if(!letraValida(get_simbolo_pos(i,p_afnd->alf), p_afnd)){ // el simbolo no esta en el alfabeto
+			p_afnd = AFNDInsertaSimbolo(p_afnd, get_simbolo_pos(i,p_afnd1O_1->alf));
+		}
+	}
+	for(i=0;i<p_afnd1O_2->talf;i++){
+		if(!letraValida(get_simbolo_pos(i,p_afnd1O_2->alf), p_afnd)){ // el simbolo no esta en el alfabeto
+			p_afnd = AFNDInsertaSimbolo(p_afnd, get_simbolo_pos(i,p_afnd1O_2->alf));
 		}
 	}
 
+	/*INSERTAMOS AUTOMATA 1*/
+	for(i=0; i<p_afnd1O_1->nest; i++){
+		strcat(nombreE, aux1);
+		e = p_afnd1O_1->est[i];
+		strcat(nombreE, get_nombre(e));
+		p_afnd = AFNDInsertaEstado(p_afnd, nombreE, get_tipo(e));
+	}
+	/*transiciones*/
+	for(i=0; i<p_afnd1O_1->nest; i++){
+		e = p_afnd1O_1->est[i];
+		strcat(nombreE, aux1);
+		strcat(nombreE, get_nombre(e));
+		t = get_transiciones(e);
+		for(j = 0; j<get_ntran(e);j++){
+			f = get_finales(t[j]);
+			for(k=0; k<get_nfinales(t[j]); k++){
+				strcat(nombreT, aux1);
+				strcat(nombreT, f[k]);
+				AFNDInsertaTransicion(p_afnd, nombreE, get_valor(t[j]), nombreT);
+			}
+		}
+		/*transiciones lambda*/
+		posE = get_posicion_estado(p_afnd1O_1,get_nombre(e));
+		for(j =0; j<p_afnd1O_1->nest; j++){
+			if(getLvalor(p_afnd1O_1->lambda, posE, j) == 1){
+				strcat(nombreT, aux1);
+				strcat(nombreT, get_nombre(p_afnd1O_1->est[j]));
+				AFNDInsertaLTransicion(p_afnd, nombreE,nombreT);
+			}
+		}
+	}
+	/*INSERTAMOS AUTOMATA 2*/
+	for(i=0; i<p_afnd1O_2->nest; i++){
+		strcat(nombreE, aux2);
+		e = p_afnd1O_2->est[i];
+		strcat(nombreE, get_nombre(e));
+		p_afnd = AFNDInsertaEstado(p_afnd, nombreE, get_tipo(e));
+	}
+	/*transiciones*/
+	for(i=0; i<p_afnd1O_2->nest; i++){
+		e = p_afnd1O_2->est[i];
+		strcat(nombreE, aux2);
+		strcat(nombreE, get_nombre(e));
+		t = get_transiciones(e);
+		for(j = 0; j<get_ntran(e);j++){
+			f = get_finales(t[j]);
+			for(k=0; k<get_nfinales(t[j]); k++){
+				strcat(nombreT, aux2);
+				strcat(nombreT, f[k]);
+				AFNDInsertaTransicion(p_afnd, nombreE, get_valor(t[j]), nombreT);
+			}
+		}
+		/*transiciones lambda*/
+		posE = get_posicion_estado(p_afnd1O_2,get_nombre(e));
+		for(j =0; j<p_afnd1O_2->nest; j++){
+			if(getLvalor(p_afnd1O_2->lambda, posE, j) == 1){
+				strcat(nombreT, aux2);
+				strcat(nombreT, get_nombre(p_afnd1O_2->est[j]));
+				AFNDInsertaLTransicion(p_afnd, nombreE,nombreT);
+			}
+		}
+	}
+	p_afnd = AFNDAAFND1O(p_afnd);
+	return p_afnd;
 
 }
+
 AFND * AFND1OConcatena(AFND * p_afnd_origen1, AFND * p_afnd_origen2);
 AFND * AFND1OEstrella(AFND * p_afnd_origen);
 
@@ -766,7 +852,7 @@ char ** get_estados_tipo(AFND * p_afnd, enum TIPO tipo){
 			tam +=1;
 		}
 	}
-	return estado;
+	return estados;
 }
 
 int get_n_estados_tipo(AFND * p_afnd, enum TIPO tipo){
