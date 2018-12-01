@@ -674,3 +674,116 @@ int letraValida(char * letra, AFND * p_afnd){
 	}
 	return 0;
 }
+
+
+/* Para la creación de los AFND1Os básicos */
+
+AFND * AFND1ODeSimbolo(char * simbolo){
+	AFND * afnd = AFNDNuevo("afnd", 2, 1)
+	afnd = AFNDInsertaSimbolo(afnd, simbolo)
+	afnd = AFNDInsertaEstado(afnd, "q0", INICIAL)
+	afnd = AFNDInsertaEstado(afnd, "qf", FINAL)
+	afnd = AFNDInsertaTransicion(afnd, "q0", simbolo, "qf")
+	return afnd;
+}
+AFND * AFND1ODeLambda(){
+	AFND * afnd = AFNDNuevo("afnd", 2, 1)
+	afnd = AFNDInsertaEstado(afnd, "q0", INICIAL)
+	afnd = AFNDInsertaEstado(afnd, "qf", FINAL)
+	afnd = AFNDInsertaLTransicion(afnd, "q0", "qf");
+	return afnd;
+}
+AFND * AFNDAAFND1O(AFND * p_afnd){
+	/* FINALES*/
+	char ** aux;
+	int naux, i;
+	Estado * est;
+	naux = get_n_estados_tipo(p_afnd, FINAL);
+	if(naux == 0){
+		/*NO SE VA A DAR NUNCA, IMPLEMENTACION EN EL FUTURO*/
+		return NULL;
+	}
+	if(naux != 1){
+		aux = get_estados_tipo(p_afnd, FINAL);
+		p_afnd = AFNDInsertaEstado(p_afnd, "qFINAL", FINAL);
+		for(i=0; i< naux; i++){
+			est = buscar_estado(p_afnd, aux[i]);
+			setTipo(est, NORMAL);
+			p_afnd = AFNDInsertaLTransicion(p_afnd, aux[i], "qFINAL");
+		}
+		free_estados_tipo(aux, naux);
+	}
+
+	/* INICIALES */
+	naux = get_n_estados_tipo(p_afnd, INICIAL);
+	if(naux == 0){
+		/*NO SE VA A DAR NUNCA, IMPLEMENTACION EN EL FUTURO*/
+		return NULL;
+	}
+	if(naux == 1){
+		return p_afnd;
+	}
+	aux = get_estados_tipo(p_afnd, INICIAL);
+	p_afnd = AFNDInsertaEstado(p_afnd, "qINICIAL", INICIAL);
+	for(i=0; i< naux; i++){
+		est = buscar_estado(p_afnd, aux[i]);
+		setTipo(est, NORMAL);
+		p_afnd = AFNDInsertaLTransicion(p_afnd, "qINICIAL",aux[i]);
+	}
+	free_estados_tipo(aux, naux);
+	return p_afnd;
+}
+
+/* Para la creación de los AFND1Os derivados de otros mediante operadores regulares */
+AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2){
+	AFND * p_afnd = AFNDNuevo("afnd_U", 2, 1)
+	char * i1,*i2,*f1,*f2;
+	int i;
+	p_afnd = AFNDInsertaEstado(p_afnd, "UI", INICIAL);
+	p_afnd = AFNDInsertaEstado(p_afnd, "UF", FINAL);
+	for(i=0; i<p_afnd1O_1->nest; i++){
+		setNombre(p_afnd1O_1->est[i], "U1_");
+		if(get_tipo(p_afnd1O_1->est[i]) == INICIAL){
+			i1= get
+		}
+	}
+
+
+}
+AFND * AFND1OConcatena(AFND * p_afnd_origen1, AFND * p_afnd_origen2);
+AFND * AFND1OEstrella(AFND * p_afnd_origen);
+
+/* Para la representación gráfica compatible con .dot de cualquier AFND */
+void AFNDADot(AFND * p_afnd);
+
+char ** get_estados_tipo(AFND * p_afnd, enum TIPO tipo){
+	int i, tam = 1;
+	char ** estados = (char**)realloc(estados, tam*(sizeof(char *)));
+	for(i=0; i<p_afnd->nest; i++){
+		if(get_tipo(p_afnd->est[i]) == tipo || get_tipo(p_afnd->est[i]) == INICIAL_Y_FINAL){
+			estados = (char**)realloc(estados, tam*(sizeof(char *)));
+			strcpy(estados[tam-1], get_nombre(p_afnd->est[i]));
+			tam +=1;
+		}
+	}
+	return estado;
+}
+
+int get_n_estados_tipo(AFND * p_afnd, enum TIPO tipo){
+	int i, cont = 0;
+	for(i=0; i<p_afnd->nest; i++){
+		if(get_tipo(p_afnd->est[i]) == tipo || get_tipo(p_afnd->est[i]) == INICIAL_Y_FINAL){
+			cont +=1;
+		}
+	}
+	return cont;
+}
+
+void free_estados_tipo(char** finales, int nfinales){
+	int i;
+	for(i=0; i< nfinales; i++){
+		free(finales[i]);
+	}
+	free(finales);
+	return;
+}

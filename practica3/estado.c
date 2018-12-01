@@ -284,3 +284,8 @@ int get_nfinales_transicion(Estado* estado, char* valor){
 	}
 	return ERROR;
 }
+
+void setTipo(Estado * e, enum TIPO tipo){
+	e->tipo = tipo;
+	return;
+}

@@ -313,4 +313,19 @@ AFND * AFNDInicializaCadenaActual (AFND * p_afnd );
 
 int letraValida(char * letra, AFND * p_afnd);
 
+
+/* Para la creación de los AFND1Os básicos */
+
+AFND * AFND1ODeSimbolo(char * simbolo);
+AFND * AFND1ODeLambda();
+AFND * AFNDAAFND1O(AFND * p_afnd);
+
+/* Para la creación de los AFND1Os derivados de otros mediante operadores regulares */
+AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2);
+AFND * AFND1OConcatena(AFND * p_afnd_origen1, AFND * p_afnd_origen2);
+AFND * AFND1OEstrella(AFND * p_afnd_origen);
+
+/* Para la representación gráfica compatible con .dot de cualquier AFND */
+void AFNDADot(AFND * p_afnd);
+
 #endif
