@@ -786,16 +786,48 @@ AFND * AFND1OConcatena(AFND * p_afnd1O_1, AFND * p_afnd1O_2){
 
 AFND * AFND1OEstrella(AFND * p_afnd_origen){
 	char ** ini, **fin;
+	Estado * e = NULL;
+	AFND * p_afnd = NULL;
+	int i, j,k, posE;
+	Transicion** t = NULL;
+	char ** f =NULL;
+	p_afnd = AFNDNuevo(p_afnd_origen->nombre, 0, 0);
+	/*copiamos estados*/
+
+	for(i=0; i<p_afnd_origen->nest; i++){
+		e = p_afnd_origen->est[i];
+		p_afnd = AFNDInsertaEstado(p_afnd, get_nombre(e), get_tipo(e));
+	}
+	/*transiciones*/
+	for(i=0; i<p_afnd_origen->nest; i++){
+		e = p_afnd_origen->est[i];
+		t = get_transiciones(e);
+		for(j = 0; j<get_ntran(e);j++){
+			f = get_finales(t[j]);
+			for(k=0; k<get_nfinales(t[j]); k++){
+				AFNDInsertaTransicion(p_afnd, get_nombre(e), get_valor(t[j]), f[k]);
+			}
+		}
+		/*transiciones lambda*/
+		posE = get_posicion_estado(p_afnd_origen,get_nombre(e));
+		for(j =0; j<p_afnd_origen->nest; j++){
+			if(getLvalor(p_afnd_origen->lambda, posE, j) == 1){
+				AFNDInsertaLTransicion(p_afnd, get_nombre(e),get_nombre(p_afnd_origen->est[j]));
+			}
+		}
+	}
+
+
 	ini = get_estados_tipo(p_afnd_origen, INICIAL);
 	fin = get_estados_tipo(p_afnd_origen, FINAL);
 
-	p_afnd_origen = AFNDAAFND1O(p_afnd_origen);
-	AFNDInsertaLTransicion(p_afnd_origen, ini[0],fin[0]);
-	AFNDInsertaLTransicion(p_afnd_origen, fin[0],ini[0]);
+	p_afnd= AFNDAAFND1O(p_afnd);
+	AFNDInsertaLTransicion(p_afnd, ini[0],fin[0]);
+	AFNDInsertaLTransicion(p_afnd, fin[0],ini[0]);
 
 	free_estados_tipo(ini, get_n_estados_tipo(p_afnd_origen, INICIAL));
 	free_estados_tipo(fin, get_n_estados_tipo(p_afnd_origen, FINAL));
-	return p_afnd_origen;
+	return p_afnd;
 }
 
 /* Para la representación gráfica compatible con .dot de cualquier AFND */
