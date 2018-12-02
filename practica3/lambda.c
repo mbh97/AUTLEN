@@ -25,28 +25,15 @@ Salida:
 
 
  *********************************************************************************/
-Lambda * inicializa_lambda(int size){
-	int i, j;
+Lambda * inicializa_lambda(){
 	Lambda * lambda = NULL;
 	lambda = (Lambda*)malloc(sizeof(Lambda));
 	if(!lambda){
 		return NULL;
 	}
+	lambda->size = 0;
+	lambda->matriz = NULL;
 
-	lambda->matriz = (int **)malloc(size*sizeof(int *));
-	if(!lambda->matriz){
-		free(lambda);
-		return NULL;
-	}
-	for(i = 0; i < size; i++){
-		lambda->matriz[i] = (int *)malloc(size*sizeof(int));
-	}
-	for(i = 0; i < size; i++){
-		for(j = 0; j < size; j++){
-			lambda->matriz[i][j] = 0;
-		}
-	}
-	lambda->size = size;
 	return lambda;
 }
 
@@ -86,6 +73,27 @@ void elimina_lambda(Lambda * lambda){
  *********************************************************************************/
 void insertaLTransicion(Lambda*lambda, int i, int f){
 	lambda->matriz[i][f] = 1;
+}
+
+void incrementaLmatriz(Lambda*lambda){
+	int i;
+	lambda->size+=1;
+	lambda->matriz = (int **)realloc(lambda->matriz,lambda->size*sizeof(int*));
+
+	for(i = 0; i < lambda->size; i++){
+		if(i == lambda->size-1){
+			lambda->matriz[i] = NULL;
+		}
+		lambda->matriz[i] = (int *)realloc(lambda->matriz[i],lambda->size*sizeof(int));
+	}
+	for(i=0; i< lambda->size;i++){
+		if(i == lambda->size-1){
+			lambda->matriz[i][i] = 0;
+		}else{
+			lambda->matriz[i][lambda->size-1] = 0;
+			lambda->matriz[lambda->size-1][i] = 0;
+		}
+	}
 }
 
  /********************************************************************************
