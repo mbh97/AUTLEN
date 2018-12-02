@@ -66,14 +66,16 @@ int eliminar_estado(Estado* estado){
 	int i;
 	if(!estado)
 		return ERROR;
-	if(estado->nombre)
-		free(estado->nombre);
+	if(!estado->transiciones)
+		printf("ESTAMOS JODIDAS\n");
 	if(estado->ntran > 0){
 		for(i = 0; i < estado->ntran; i++)
 			if(estado->transiciones[i])
 				eliminar_transicion(estado->transiciones[i]);
 		free(estado->transiciones);
 	}
+	if(estado->nombre)
+		free(estado->nombre);
 	free(estado);
 	return OK;
 }

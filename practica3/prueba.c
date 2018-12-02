@@ -9,13 +9,8 @@
 
 int main(int argc, char ** argv)
 {
-AFND * p_afnd_l0;
 AFND * p_afnd_l1;
-AFND * p_afnd_l2;
-AFND * p_afnd_l3;
-AFND * p_afnd_l4;
 AFND * p_afnd_l5;
-AFND * p_afnd_l6;
 /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESION REGULAR “1” */
 p_afnd_l1 = AFND1ODeSimbolo("1");
 p_afnd_l5 = AFND1OEstrella(p_afnd_l1);
