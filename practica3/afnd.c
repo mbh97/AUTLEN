@@ -621,7 +621,6 @@ AFND* AFNDInsertaLTransicion(AFND* p_afnd, char* nombre_estado_i, char* nombre_e
 	int i,f;
 	i = get_posicion_estado(p_afnd, nombre_estado_i);
 	f = get_posicion_estado(p_afnd, nombre_estado_f);
-	printf("%d,%d\n", i,f);
 	insertaLTransicion(p_afnd->lambda,i,f);
 	return p_afnd;
 }
@@ -697,13 +696,11 @@ AFND * AFNDAAFND1O(AFND * p_afnd){
 		return NULL;
 	}
 	if(naux != 1){
-		printf("naux=%d\n", naux);
 		aux = get_estados_tipo(p_afnd, FINAL);
 		p_afnd = AFNDInsertaEstado(p_afnd, "qFINAL", FINAL);
 		for(i=0; i< naux; i++){
 			est = buscar_estado(p_afnd, aux[i]);
 			setTipo(est, NORMAL);
-			printf("normal=%s\n", aux[i]);
 			p_afnd = AFNDInsertaLTransicion(p_afnd, aux[i], "qFINAL");
 		}
 		free_estados_tipo(aux, naux);
@@ -1001,6 +998,8 @@ AFND * insertaAUT(AFND * p_afnd, AFND * p_afnd1O_1, char* aux1){
 			}
 		}
 		strcpy(nombreE, "");
+		strcat(nombreE, aux1);
+		strcat(nombreE, get_nombre(e));
 		/*transiciones lambda*/
 		posE = get_posicion_estado(p_afnd1O_1,get_nombre(e));
 		for(j =0; j<p_afnd1O_1->nest; j++){

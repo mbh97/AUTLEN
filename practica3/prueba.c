@@ -47,10 +47,6 @@ fprintf(stdout,"A CONTINUACIÓN SE VA A MOSTRAR LA UNIÓN DE DOS AUTÓMATAS QUE 
 AFNDImprime(stdout,p_afnd_l0);
 fprintf(stdout, "Y ESTA ES SU UNIÓN\n");
 AFNDImprime(stdout,p_afnd_l4);
-<<<<<<< HEAD
-
-AFNDADot(p_afnd_l4);
-=======
 fprintf(stdout,"SE MUESTRA EL AUTÓMATA FINITO CORRESPONDIENTE A LA EXPRESION 1 * A PARTIR DEL AUTÓMATA ASOCIADO CON 1 QUE YA SE MOSTRÓ ANTERIORMENTE\n");
 AFNDImprime(stdout,p_afnd_l6);
 /********************************************************/
@@ -96,7 +92,6 @@ AFNDImprimeCadenaActual(stdout,p_afnd_l3);
 AFNDInicializaEstado(p_afnd_l3);
 AFNDProcesaEntrada(stdout,p_afnd_l3);
 AFNDInicializaCadenaActual(p_afnd_l3);
->>>>>>> f4a037d3341551da71fd7072686ad20581068465
 /********************************************************/
 AFNDElimina(p_afnd_l0);
 AFNDElimina(p_afnd_l1);
