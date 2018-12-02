@@ -26,7 +26,7 @@ Salida:
 
 
  *********************************************************************************/
-Lambda * inicializa_lambda(int size);
+Lambda * inicializa_lambda();
 
  /********************************************************************************
 	Funcion: elimina_lambda
@@ -112,5 +112,8 @@ int getLvalor(Lambda * lambda, int i, int j);
 
  *********************************************************************************/
 void imprime_lambda(FILE* fd, Lambda* lambda);
+
+
+void incrementaLmatriz(Lambda*lambda);
 
 #endif

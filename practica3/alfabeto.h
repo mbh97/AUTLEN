@@ -107,8 +107,5 @@ int insertar_simbolo(char* simbolo, Alfabeto* a);
 
 int imprime_alfabeto(FILE* fd,  Alfabeto* a);
 
-
-
-
 #endif
 

@@ -74,7 +74,7 @@ Salida:
 	afnd->nact = 0;
 
 	/* Matriz transiciones lambda */
-	afnd->lambda = inicializa_lambda(num_estados);
+	afnd->lambda = inicializa_lambda();
 	if(!afnd->lambda){
 		free(afnd->nombre);
 		free(afnd->est);
@@ -239,6 +239,8 @@ AFND * AFNDInsertaEstado(AFND * p_afnd, char * nombre, int tipo){
 	p_afnd->est = (Estado **)realloc(p_afnd->est,p_afnd->nest*sizeof(Estado*));
 
 	p_afnd->est[p_afnd->nest-1]= crear_estado(nombre, tipo);
+
+	incrementaLmatriz(p_afnd->lambda);
 	return p_afnd;
 }
 /********************************************************************************
@@ -615,6 +617,7 @@ AFND* AFNDInsertaLTransicion(AFND* p_afnd, char* nombre_estado_i, char* nombre_e
 	int i,f;
 	i = get_posicion_estado(p_afnd, nombre_estado_i);
 	f = get_posicion_estado(p_afnd, nombre_estado_f);
+	printf("%d,%d\n", i,f);
 	insertaLTransicion(p_afnd->lambda,i,f);
 	return p_afnd;
 }
@@ -690,11 +693,13 @@ AFND * AFNDAAFND1O(AFND * p_afnd){
 		return NULL;
 	}
 	if(naux != 1){
+		printf("naux=%d\n", naux);
 		aux = get_estados_tipo(p_afnd, FINAL);
 		p_afnd = AFNDInsertaEstado(p_afnd, "qFINAL", FINAL);
 		for(i=0; i< naux; i++){
 			est = buscar_estado(p_afnd, aux[i]);
 			setTipo(est, NORMAL);
+			printf("normal=%s\n", aux[i]);
 			p_afnd = AFNDInsertaLTransicion(p_afnd, aux[i], "qFINAL");
 		}
 		free_estados_tipo(aux, naux);
