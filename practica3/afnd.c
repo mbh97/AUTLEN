@@ -122,6 +122,10 @@ Salida:
 	return;
 }
 
+
+char* AFNDgetNombre(AFND* p_afnd){
+	return p_afnd->nombre;
+}
  /********************************************************************************
 	Funcion: AFNDImprime
   	Descripcion: imprime un afnd
@@ -732,7 +736,7 @@ AFND * AFND1OUne(AFND * p_afnd1O_1, AFND * p_afnd1O_2){
 	char *aux2 = "U2_";
 	
 	/* CREAMOS AUTOMATA */
-	p_afnd = newAutomata(p_afnd1O_1,p_afnd1O_2);
+	p_afnd = newAutomata(p_afnd1O_1,p_afnd1O_2,"_U_");
 
 	/*INSERTAMOS AUTOMATAS*/
 	p_afnd = insertaAUT(p_afnd,p_afnd1O_1, aux1);
@@ -752,7 +756,7 @@ AFND * AFND1OConcatena(AFND * p_afnd1O_1, AFND * p_afnd1O_2){
 	char ** ini, **fin;
 
 	/* CREAMOS AUTOMATA */
-	p_afnd = newAutomata(p_afnd1O_1,p_afnd1O_2);
+	p_afnd = newAutomata(p_afnd1O_1,p_afnd1O_2,"_K_");
 
 	/*INSERTAMOS AUTOMATAS*/
 	p_afnd = insertaAUT(p_afnd,p_afnd1O_1, aux1);
@@ -795,7 +799,67 @@ AFND * AFND1OEstrella(AFND * p_afnd_origen){
 }
 
 /* Para la representación gráfica compatible con .dot de cualquier AFND */
-void AFNDADot(AFND * p_afnd);
+void AFNDADot(AFND * p_afnd){
+	Transicion**t;
+	int i,j,k;
+	char*origen,*destino,*valor;
+	char**finales;
+	char nombre[TAM] ="";
+	FILE* pf;
+    if (!p_afnd)
+        return;
+    /* Creamos el archivo */
+    strcat(nombre, AFNDgetNombre(p_afnd));
+    strcat(nombre, ".dot");
+    pf = fopen(nombre, "w+");
+    if (!pf)
+        return;
+    fprintf(pf, "digraph %s  { rankdir=LR;\n", p_afnd->nombre);
+    fprintf(pf, "\t_invisible [style=\"invis\"];\n");
+
+    /* Imprimimos todos los estados */
+    for (i = 0; i < p_afnd->nest; i++){
+    	if (get_tipo(p_afnd->est[i]) == FINAL){
+    		fprintf(pf, "\t%s [penwidth=\"2\"];\n", get_nombre(p_afnd->est[i]));
+        } else if(get_tipo(p_afnd->est[i]) == INICIAL){
+        	fprintf(pf, "\t%s;\n", get_nombre(p_afnd->est[i]));
+        	fprintf(pf, "\t_invisible -> %s ;\n", get_nombre(p_afnd->est[i]));
+        }else{
+        	fprintf(pf, "\t%s;\n", get_nombre(p_afnd->est[i]));
+        }
+    }
+
+    /* transiciones */
+    for (i = 0; i < p_afnd->nest; i++){
+    	origen = get_nombre(p_afnd->est[i]);
+    	t = get_transiciones(p_afnd->est[i]);
+    	for(j=0;j<get_ntran(p_afnd->est[i]);j++){
+    		valor = get_valor(t[j]);
+    		finales = get_finales(t[j]);
+    		for(k=0; k<get_nfinales(t[j]); k++){
+    			destino = finales[k];
+    			fprintf(pf, "\t%s -> %s [label=\"%s\"];\n", origen, destino, valor);
+    		}
+    	}
+    }
+    /* transiciones lambda */
+    for(i = 0; i < getLSize(p_afnd->lambda); i++){
+    	for(j = 0; j < getLSize(p_afnd->lambda); j++){
+    		if(getLvalor(p_afnd->lambda,i,j) == 1 && i!=j){
+    			origen = get_nombre(p_afnd->est[i]);
+    			destino = get_nombre(p_afnd->est[j]);
+    			fprintf(pf, "\t%s -> %s [label=\"&lambda;\"];\n", origen, destino);
+    		}
+    	}
+    }
+
+    fprintf(pf, "}");
+
+    fclose(pf);
+    pf = NULL;
+
+    return;
+}
 
 char ** get_estados_tipo(AFND * p_afnd, enum TIPO tipo){
 	int i, tam = 1;
@@ -831,10 +895,11 @@ void free_estados_tipo(char** finales, int nfinales){
 	return;
 }
 
-AFND * newAutomata(AFND * p_afnd1O_1, AFND * p_afnd1O_2){
+AFND * newAutomata(AFND * p_afnd1O_1, AFND * p_afnd1O_2, char* op){
 	AFND * p_afnd;
 	int nestados, nsimbolos, rep=0;
 	int i,j;
+	char nombreA[TAM] ="";
 
 	/* CREAMOS AUTOMATA */
 	nestados = p_afnd1O_1->nest + p_afnd1O_2->nest;
@@ -846,7 +911,12 @@ AFND * newAutomata(AFND * p_afnd1O_1, AFND * p_afnd1O_2){
 		}
 	}
 	nsimbolos = p_afnd1O_2->talf + p_afnd1O_1->talf - rep;
-	p_afnd = AFNDNuevo("afnd", nestados, nsimbolos);
+	strcat(nombreA, AFNDgetNombre(p_afnd1O_1));
+	strcat(nombreA, "1");
+	strcat(nombreA, op);
+	strcat(nombreA, AFNDgetNombre(p_afnd1O_2));
+	strcat(nombreA, "2");
+	p_afnd = AFNDNuevo(nombreA, nestados, nsimbolos);
 	/* INSERTAMOS SIMBOLOS */
 	for(i=0;i<p_afnd1O_1->talf;i++){
 		if(p_afnd->talf == 0){

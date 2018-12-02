@@ -334,5 +334,6 @@ void free_estados_tipo(char** finales, int nfinales);
 
 AFND * insertaAUT(AFND * p_afnd, AFND * p_afnd1O_1, char* aux1);
 
-AFND * newAutomata(AFND * p_afnd1O_1, AFND * p_afnd1O_2);
+AFND * newAutomata(AFND * p_afnd1O_1, AFND * p_afnd1O_2, char* op);
+char* AFNDgetNombre(AFND* p_afnd);
 #endif

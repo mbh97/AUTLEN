@@ -39,6 +39,8 @@ fprintf(stdout,"A CONTINUACIÓN SE VA A MOSTRAR LA UNIÓN DE DOS AUTÓMATAS QUE 
 AFNDImprime(stdout,p_afnd_l0);
 fprintf(stdout, "Y ESTA ES SU UNIÓN\n");
 AFNDImprime(stdout,p_afnd_l4);
+
+AFNDADot(p_afnd_l4);
 /********************************************************/
 AFNDElimina(p_afnd_l0);
 AFNDElimina(p_afnd_l1);

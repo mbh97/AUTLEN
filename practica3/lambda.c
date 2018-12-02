@@ -193,3 +193,7 @@ void imprime_lambda(FILE* fd, Lambda* lambda){
 	}
 	printf("\t}\n");
 }
+
+int getLSize(Lambda* lambda){
+	return lambda->size;
+}

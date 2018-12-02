@@ -1,0 +1,16 @@
+digraph afnd1_U_afnd2  { rankdir=LR;
+	_invisible [style="invis"];
+	U1_q0;
+	U1_qf;
+	U2_q0;
+	U2_qf;
+	qFINAL [penwidth="2"];
+	qINICIAL;
+	_invisible -> qINICIAL ;
+	U1_q0 -> U1_qf [label="0"];
+	U2_q0 -> U2_qf [label="1"];
+	U1_qf -> qFINAL [label="&lambda;"];
+	U2_qf -> qFINAL [label="&lambda;"];
+	qINICIAL -> U1_q0 [label="&lambda;"];
+	qINICIAL -> U2_q0 [label="&lambda;"];
+}

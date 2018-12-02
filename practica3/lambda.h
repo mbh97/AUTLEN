@@ -116,4 +116,6 @@ void imprime_lambda(FILE* fd, Lambda* lambda);
 
 void incrementaLmatriz(Lambda*lambda);
 
+int getLSize(Lambda* lambda);
+
 #endif
