@@ -1,6 +1,6 @@
 /********************************************************************************
 
-	AUTLEN - Practica 1
+	AUTLEN - Practica 3
 	Blanca Abella y Maria Barroso
 	Pareja 3
 
@@ -691,10 +691,7 @@ AFND * AFNDAAFND1O(AFND * p_afnd){
 	int naux, i;
 	Estado * est;
 	naux = get_n_estados_tipo(p_afnd, FINAL);
-	if(naux == 0){
-		/*NO SE VA A DAR NUNCA, IMPLEMENTACION EN EL FUTURO*/
-		return NULL;
-	}
+	
 	if(naux != 1){
 		aux = get_estados_tipo(p_afnd, FINAL);
 		p_afnd = AFNDInsertaEstado(p_afnd, "qFINAL", FINAL);
@@ -708,10 +705,6 @@ AFND * AFNDAAFND1O(AFND * p_afnd){
 
 	/* INICIALES */
 	naux = get_n_estados_tipo(p_afnd, INICIAL);
-	if(naux == 0){
-		/*NO SE VA A DAR NUNCA, IMPLEMENTACION EN EL FUTURO*/
-		return NULL;
-	}
 	if(naux == 1){
 		return p_afnd;
 	}
